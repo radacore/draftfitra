@@ -679,6 +679,7 @@ def build123():
 
 def build45():
     blocks = bab45_runs["blocks"]
+    cur_ha = [None]
     i = 0
     while i < len(blocks):
         b = blocks[i]
@@ -691,11 +692,19 @@ def build45():
             if nxt and nxt["type"] == "chapter_line":
                 i += 1
         elif t == "h_a":
-            heading_letter("".join(r["t"] for r in b["runs"]))
+            sec = "".join(r["t"] for r in b["runs"])
+            heading_letter(sec)
+            cur_ha[0] = sec
         elif t == "h_sub":
             heading_sub("".join(r["t"] for r in b["runs"]))
         elif t == "body":
-            body_par(b["runs"])
+            spans = b["runs"]
+            # KESIMPULAN & SARAN: paragraf biasa tanpa nomor "1./2./3."
+            if cur_ha[0] in ("A. KESIMPULAN", "B. SARAN") and spans \
+                    and re.match(r"^\d+\.\s", spans[0]["t"]):
+                spans = [dict(s) for s in spans]
+                spans[0]["t"] = re.sub(r"^\d+\.\s+", "", spans[0]["t"])
+            body_par(spans)
         elif t == "caption":
             caption_from_runs(b["runs"])
         elif t == "image":
