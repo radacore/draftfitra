@@ -1,0 +1,67 @@
+# ===== OS & editor =====
+.DS_Store
+*.swp
+~$*
+Thumbs.db
+
+# ===== Python =====
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ===== Node / tool terpisah (punya repo sendiri) =====
+node_modules/
+office-skripsi/
+
+# ===== Direktori kerja & artefak sementara =====
+work/
+paket_evaluasi/
+.playwright-mcp/
+revisi_work/unpacked/
+revisi_work/test_merge/
+
+# ===== PNG root =====
+# Iterasi & screenshot desain (sudah tersimpan di figures/ dan revisi_work/pdf_img/)
+*.png
+
+# Kecualikan gambar sumber yang asli
+!figures/*.png
+!revisi_work/pdf_img/*.png
+
+# Paket evaluasi / screenshot perbandingan root
+b13_*.png
+b13_fix-*.png
+cmp*.png
+new_t1-*.png
+fin*.png
+sync*.png
+vb1-*.png
+vb2-*.png
+veq*.png
+vg4-*.png
+vhw*.png
+vimg4b-*.png
+vsym-*.png
+vtoc*.png
+bab4_*.png
+
+# ===== PDF tidak terkait / referensi =====
+A_01-*.pdf
+A_05-*.pdf
+BAB IV dan BAB*.pdf
+Draf*.pdf
+contoh*.pdf
+
+# ===== Draft lama & backup =====
+Proposal_Skripsi_Zulfitra_MDR-TB_BAB1-3.docx
+Proposal_Skripsi_Zulfitra_MDR-TB_BAB1-3.pdf
+revisi_work/*_backup_*
+revisi_work/Proposal_Skripsi_Zulfitra_MDR-TB_rev1.*
+revisi_work/Proposal_full_step1.*
+revisi_work/bab123.json
+revisi_work/missing_bab1-3.json
+revisi_work/extract_bab123.py
+revisi_work/extract_bab45.py
+revisi_work/build_full.py
+revisi_work/bab45_img/

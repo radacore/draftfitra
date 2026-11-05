@@ -1,0 +1,2415 @@
+PENERAPAN TEKNIK SMOTE DAN RANDOM FOREST
+DALAM KLASIFIKASI KEBERHASILAN PENGOBATAN
+                  PENYAKIT MDR-TB
+
+
+
+               PROPOSAL PENELITIAN
+
+
+    Diajukan Sebagai Salah Satu Syarat untuk Mendapat Gelar
+     Sarjana Komputer (S.Kom) Program Studi Informatika
+
+
+
+
+                        Disusun Oleh :
+
+
+                         ZULFITRA
+                        105841115022
+
+
+
+
+            PROGRAM STUDI INFORMATIKA
+                    FAKULTAS TEKNIK
+     UNIVERSITAS MUHAMMADIYAH MAKASSAR
+                             2026
+                           KATA PENGANTAR
+
+       Assalamu'alaikum warahmatullahi wabarakatuh.
+       Puji syukur penulis panjatkan ke hadirat Allah SWT atas limpahan rahmat,
+taufik, dan hidayah-Nya sehingga proposal penelitian yang berjudul “Penerapan
+Teknik SMOTE dan Random Forest dalam Klasifikasi Keberhasilan Pengobatan
+Penyakit MDR-TB” dapat diselesaikan dengan baik. Sebagai bentuk rasa hormat,
+penulis menyampaikan terima kasih yang sebesar-besarnya kepada kedua orang
+tua, [Nama Ayah] dan [Nama Ibu], atas doa, dukungan, motivasi, serta bantuan
+yang tiada henti mengiringi proses studi hingga penyusunan proposal ini.
+Shalawat dan salam semoga tercurah kepada Nabi Muhammad SAW yang telah
+membawa umat manusia menuju peradaban ilmu pengetahuan.
+       Sehubungan dengan itu, penulis menyampaikan penghargaan dan ucapan
+terima kasih kepada:
+1. Bapak Dr. Ir. H. Abd. Rakhim Nanda, ST., MT., IPU., selaku Rektor
+   Universitas Muhammadiyah Makassar.
+2. Bapak Ir. Muhammad Syafaat S Kuba, ST., MT., selaku Dekan Fakultas
+   Teknik Universitas Muhammadiyah Makassar.
+3. Ibu Rizki Yusliana Bakti, S.T., M.T., selaku Ketua Program Studi Informatika
+   Universitas Muhammadiyah Makassar.
+4. Ibu [Nama Dosen Pembimbing I], selaku Dosen Pembimbing I, atas
+   bimbingan,    masukan    ilmiah,   dan   koreksi   yang   sangat   membantu
+   penyempurnaan proposal penelitian ini.
+5. Ibu Chyquitha Danuputri, S.Kom., M.T., selaku Dosen Pembimbing II, atas
+   bimbingan,    masukan    ilmiah,   dan   koreksi   yang   sangat   membantu
+   penyempurnaan proposal penelitian ini.
+6. Seluruh dosen Program Studi Informatika, atas ilmu dan pengalaman yang
+   diberikan kepada penulis selama masa studi.
+7. Seluruh staf Tata Usaha Fakultas Teknik dan Program Studi Informatika, atas
+   bantuan administratif dan kelancaran proses pengurusan dokumen akademik
+   selama masa studi.
+8. Pihak RSUD Labuang Baji, Sulawesi Selatan, atas izin dan kesempatan dalam
+   pengambilan data penelitian yang menjadi bagian penting dari penelitian ini.
+
+
+
+                                       i
+9. Rekan-rekan dan sahabat yang telah memberikan dukungan akademik maupun
+   moral dan motivasi selama penyusunan proposal.
+       Penulis menyadari bahwa proposal ini masih memiliki keterbatasan. Oleh
+karena itu, kritik dan saran yang konstruktif sangat diharapkan demi perbaikan
+dan penyempurnaan penelitian selanjutnya. Semoga Allah SWT membalas segala
+bantuan dan kebaikan yang telah diberikan.
+       Wassalamu'alaikum warahmatullahi wabarakatuh.
+
+
+
+
+                                               Makassar, [tanggal bulan tahun]
+                                                                      Penulis,
+
+
+
+
+                                                                  ZULFITRA
+
+
+
+
+                                       ii
+                                               DAFTAR ISI
+
+KATA PENGANTAR............................................................................................i
+DAFTAR ISI.........................................................................................................iii
+DAFTAR TABEL................................................................................................. iv
+DAFTAR GAMBAR............................................................................................. v
+DAFTAR SINGKATAN......................................................................................vi
+BAB I PENDAHULUAN......................................................................................1
+          A. Latar Belakang......................................................................................1
+          B. Rumusan Masalah..................................................................................5
+          C. Tujuan Penelitian................................................................................... 5
+          D. Manfaat Penelitian.................................................................................6
+          E. Ruang Lingkup Penelitian.....................................................................6
+          F. Sistematika Penulisan............................................................................7
+BAB II TINJAUAN PUSTAKA............................................................................9
+          A. Landasan Teori......................................................................................9
+          B. Penelitian Terkait.................................................................................28
+          C. Kerangka Berpikir...............................................................................31
+BAB III METODE PENELITIAN.......................................................................33
+          A. Tempat dan Waktu Penelitian.............................................................33
+          B. Alat dan Bahan....................................................................................35
+          C. Perancangan Sistem............................................................................. 36
+BAB IV HASIL DAN PEMBAHASAN.............................................................47
+          A. Hasil Penerapan User Centered Design...............................................47
+          B. Hasil Implementasi Sistem Akhir........................................................49
+          C. Hasil Pengujian Black Box..................................................................60
+          D. Hasil Validasi System Usability Scale................................................61
+          F. Pembahasan..........................................................................................63
+BAB V PENUTUP...............................................................................................65
+          A. KESIMPULAN................................................................................... 65
+          B. SARAN................................................................................................65
+DAFTAR PUSTAKA..........................................................................................66
+
+
+
+
+                                                          iii
+                                         DAFTAR TABEL
+
+Tabel 1 Simbol Flowchart....................................................................................20
+Tabel 2 Penelitian Terkait.................................................................................... 28
+Tabel 3 Jadwal Penelitian.....................................................................................34
+Tabel 5 Confusion Matrix Data Uji......................................................................59
+Tabel 6 Metrik Evaluasi Data Uji........................................................................ 59
+Tabel 7 Hasil Cross Validation Lima Lipatan......................................................60
+Tabel 4 Hyperparameter Terpilih.........................................................................59
+Tabel 8 Perbandingan Model Tanpa dan Dengan SMOTE..................................60
+Tabel 9 Skenario Variasi Proporsi Data...............................................................60
+Tabel 10 Skenario Variasi Jumlah Pohon............................................................61
+Tabel 11 Hasil Pengujian Black Box...................................................................61
+Tabel 12 Pernyataan Kuesioner SUS...................................................................62
+Tabel 13 Rekapitulasi Jawaban SUS (Diisi Setelah Survei)................................62
+Tabel 14 Rekapitulasi Penilaian TAM (Diisi Setelah Survei).............................63
+
+
+
+
+                                                       iv
+                                     DAFTAR GAMBAR
+
+Gambar 1 Alur Kerja SMOTE............................................................................. 14
+Gambar 2 Arsitektur Random Forest...................................................................16
+Gambar 3 Kerangka Berpikir...............................................................................32
+Gambar 4 Lokasi RSUD Labuang Baji................................................................34
+Gambar 5 Desain Metode Penelitian....................................................................37
+Gambar 6 Use Case Diagram Klasifikasi Keberhasilan Pengobatan...................40
+Gambar 7 Activity Diagram Klasifikasi Keberhasilan Pengobatan.....................41
+Gambar 8 Class Diagram Klasifikasi Keberhasilan Pengobatan.........................41
+Gambar 9 Flowchart Metode SMOTE dan Random Forest.................................42
+Gambar 10 Halaman Login Sistem...................................................................... 49
+Gambar 11 Dashboard Admin..............................................................................50
+Gambar 12 Dashboard Tenaga Medis..................................................................50
+Gambar 13 Formulir Klasifikasi.......................................................................... 51
+Gambar 14 Hasil Klasifikasi dan Rekomendasi...................................................52
+Gambar 15 Riwayat Klasifikasi...........................................................................52
+Gambar 16 Evaluasi Model..................................................................................54
+Gambar 17 Pengujian Efektivitas SMOTE..........................................................55
+Gambar 18 Skenario Pengujian............................................................................56
+Gambar 19 Data Rekam Medis............................................................................57
+Gambar 20 Pembersihan Data..............................................................................57
+Gambar 21 Manajemen Akun.............................................................................. 58
+
+
+
+
+                                                     v
+               DAFTAR SINGKATAN
+
+ Singkatan    Kepanjangan
+  ADASYN      Adaptive Synthetic Sampling Approach
+    API       Application Programming Interface
+   CNN        Convolutional Neural Network
+ CRISP-DM     Cross-Industry Standard Process for Data Mining
+    F1        F1-Score
+    FN        False Negative
+    FP        False Positive
+   GPU        Graphics Processing Unit
+  K-Means     K-Means Clustering
+   K-NN       K-Nearest Neighbors
+  Laravel     Laravel Framework
+  MDR-TB      Multidrug-Resistant Tuberculosis
+   MVC        Model-View-Controller
+  MySQL       MySQL Database
+   OAT        Obat Anti-Tuberkulosis
+   PHP        Hypertext Preprocessor
+   RAM        Random Access Memory
+    RF        Random Forest
+   RSUD       Rumah Sakit Umum Daerah
+  SMOTE       Synthetic Minority Over-sampling Technique
+SMOTE-ENN     SMOTE-Edited Nearest Neighbors
+SMOTE-Tomek   SMOTE-Tomek Links
+   SPK        Sistem Pendukung Keputusan
+   SVM        Support Vector Machine
+   TBC        Tuberkulosis
+    TN        True Negative
+    TP        True Positive
+   WHO        World Health Organization
+
+
+
+
+                               vi
+                                      BAB I
+                              PENDAHULUAN
+
+A. Latar Belakang
+
+       Multi-Drug Resistant Tuberculosis (MDR-TB) merupakan salah satu
+tantangan paling berat dalam upaya pengendalian tuberkulosis secara global
+(World Health Organization, 2024). Pasien yang terinfeksi galur bakteri
+Mycobacterium tuberculosis yang resisten terhadap obat anti-tuberkulosis (OAT)
+lini pertama harus menjalani regimen pengobatan yang jauh lebih panjang,
+menelan biaya yang lebih tinggi, serta memicu efek samping yang sering kali
+melemahkan kondisi fisik dan mental pasien (World Health Organization, 2024).
+Meskipun jumlah kasus tuberkulosis global menunjukkan penurunan yang cukup
+berarti, penanganan terhadap varian MDR-TB masih jauh dari target yang
+diharapkan. Permasalahan ini menuntut strategi pengendalian yang lebih terarah,
+tidak hanya dari sisi klinis, tetapi juga dari sisi sistem informasi kesehatan yang
+mendukung pengambilan keputusan (World Health Organization, 2024).
+       Di Indonesia, urgensi permasalahan ini berada pada titik yang sangat kritis.
+Indonesia menyumbang sekitar 10% dari total beban tuberkulosis dunia sehingga
+menempati peringkat kedua tertinggi secara global setelah India. Tingkat
+keberhasilan pengobatan MDR-TB di berbagai fasilitas kesehatan nasional terus
+menghadapi kendala yang besar. Angka putus berobat (loss to follow-up) dan
+gagal pengobatan masih memprihatinkan akibat faktor yang sangat kompleks,
+mulai dari komorbiditas klinis, tingkat keparahan efek samping obat, hingga
+kendala sosial-ekonomi yang dialami pasien. Tenaga medis sering kali kesulitan
+mendeteksi potensi kegagalan pengobatan secara dini karena belum adanya sistem
+analitik cerdas yang mampu membaca pola risiko pasien secara spesifik sejak
+awal masa pengobatan (World Health Organization, 2025).
+       Salah satu akar persoalan yang dihadapi tenaga medis adalah keterbatasan
+analisis terhadap data rekam medis pasien yang telah terkumpul selama bertahun-
+tahun. Data rekam medis sebenarnya menyimpan informasi yang sangat berharga,
+seperti karakteristik demografis pasien, kondisi klinis, komorbiditas, serta riwayat
+pengobatan. Namun, data tersebut umumnya diolah secara manual dan bersifat
+
+
+
+
+                                         1
+deskriptif sehingga pola-pola yang kompleks tidak dapat dikenali. Transformasi
+data mentah menjadi pengetahuan yang dapat dimanfaatkan untuk memprediksi
+keberhasilan pengobatan memerlukan pendekatan analitis yang lebih canggih,
+salah satunya melalui pemanfaatan machine learning (Zhang dkk, 2025).
+       Pemanfaatan machine learning dalam bidang kesehatan telah terbukti
+memberikan banyak manfaat, antara lain dalam diagnosis penyakit, prediksi hasil
+pengobatan, dan pengambilan keputusan klinis. Klasifikasi merupakan salah satu
+tugas utama machine learning yang bertujuan mengelompokkan data ke dalam
+kelas tertentu berdasarkan pola yang dipelajari dari data latih. Pada konteks
+pengobatan     MDR-TB,         machine      learning    dapat     digunakan     untuk
+mengklasifikasikan pasien berdasarkan potensi keberhasilan atau kegagalan
+pengobatan, sehingga tenaga medis dapat memberikan intervensi yang lebih tepat
+dan lebih awal (Azzahra et al., 2024; Widjaja et al., 2025).
+       Meskipun      machine     learning       menawarkan     potensi   yang   besar,
+penerapannya pada data rekam medis dihadapkan pada tantangan teknis yang
+tidak sederhana. Salah satu tantangan utama adalah ketidakseimbangan kelas (data
+imbalance). Pada dataset rekam medis pasien MDR-TB, jumlah sampel dengan
+status “berhasil sembuh” umumnya jauh lebih banyak dibandingkan sampel
+dengan status “gagal”, “meninggal”, atau “putus obat”. Kondisi ini merupakan
+representasi nyata dari distribusi populasi, tetapi menjadi masalah serius ketika
+dataset langsung digunakan untuk melatih model (Pradipta et al., 2021).
+       Ketika dataset yang tidak seimbang digunakan secara langsung, algoritma
+klasifikasi akan cenderung bias terhadap kelas mayoritas. Model akan
+memprediksi sebagian besar pasien sebagai “berhasil sembuh” demi meraih
+akurasi semu yang tinggi, namun justru buta dalam mendeteksi pasien yang
+sebenarnya berisiko tinggi gagal pengobatan. Dalam konteks pengendalian MDR-
+TB, kegagalan deteksi pada kelas minoritas ini sangat fatal karena tidak hanya
+membahayakan keselamatan pasien, tetapi juga meningkatkan risiko penyebaran
+galur bakteri super-resisten di masyarakat. Oleh karena itu, penanganan
+ketidakseimbangan data menjadi prasyarat penting sebelum model dilatih
+(Nurhaliza et al., 2025).
+
+
+
+
+                                            2
+       Untuk mengatasi anomali distribusi data tersebut, teknik SMOTE
+(Synthetic Minority Over-sampling Technique) hadir sebagai solusi komputasional
+yang tangguh. Berbeda dengan pendekatan oversampling konvensional yang
+hanya menduplikasi data kelas minoritas, SMOTE bekerja dengan mensintesis
+data buatan (synthetic) yang baru dan logis berdasarkan kedekatan jarak fitur antar
+sampel melalui mekanisme k-nearest neighbors. Penyeimbangan dataset dengan
+SMOTE memungkinkan model klasifikasi belajar mengenali pola-pola kritis pada
+kelas minoritas tanpa mengalami overfitting. Dengan demikian, sistem prediksi
+menjadi jauh lebih sensitif terhadap kondisi pasien yang berisiko gagal
+pengobatan (Nurhaliza et al., 2025).
+       Sebagai mesin pengklasifikasi utama, Random Forest dipilih karena
+keunggulannya dalam memproses dataset medis yang berskala multidimensi.
+Algoritma ensemble ini bekerja dengan mengumpulkan hasil prediksi (voting) dari
+sejumlah besar pohon keputusan (decision tree), sehingga menghasilkan model
+yang stabil terhadap noise dan data pencilan (outlier). Kekuatan Random Forest
+tidak hanya terletak pada tingginya metrik evaluasi, melainkan juga pada
+kemampuannya menyajikan informasi feature importance. Melalui fitur ini,
+model dapat memetakan variabel klinis atau demografis apa saja yang paling
+krusial dalam menentukan nasib pengobatan pasien MDR-TB (Mienye & Sun,
+2022; Zhang dkk, 2025).
+       Kombinasi antara SMOTE dan Random Forest menjadi sinergi yang ideal.
+SMOTE menyeimbangkan distribusi kelas sehingga Random Forest dapat
+mempelajari pola kelas minoritas secara optimal, sementara Random Forest
+menyediakan model klasifikasi yang akurat, stabil, dan mudah diinterpretasikan
+melalui feature importance. Integrasi kedua teknik ini masih jarang diterapkan
+secara khusus pada data rekam medis pasien MDR-TB di Indonesia, sehingga
+penelitian ini diharapkan dapat mengisi celah (gap) tersebut. Dengan
+mengintegrasikan SMOTE untuk resolusi bias data dan Random Forest sebagai
+mesin prediktif, model yang dihasilkan diharapkan mampu mengenali pasien yang
+berpotensi gagal pengobatan sejak awal, sehingga penanganan dapat dilakukan
+lebih cepat, tepat, dan terarah (Zhang dkk, 2025).
+
+
+
+
+                                         3
+       Penerapan machine learning untuk memprediksi hasil pengobatan
+tuberkulosis telah banyak dilakukan di berbagai negara dengan hasil yang
+menjanjikan. Namun, sebagian besar penelitian tersebut menggunakan dataset
+internasional dengan karakteristik pasien yang berbeda dari populasi Indonesia.
+Kondisi sosial-ekonomi, prevalensi komorbiditas, serta sistem pelayanan
+kesehatan yang berbeda dapat memengaruhi pola keberhasilan pengobatan,
+sehingga diperlukan kajian yang menggunakan data lokal untuk memperoleh
+model yang relevan dengan konteks Indonesia.
+       Selain itu, sebagian besar penelitian sebelumnya berfokus pada akurasi
+keseluruhan tanpa menaruh perhatian pada kelas minoritas yang sebenarnya
+paling kritis untuk dideteksi. Padahal dalam penanganan MDR-TB, keterlambatan
+deteksi pasien yang berisiko gagal dapat berujung pada perburukan kondisi dan
+peningkatan penularan. Penelitian ini berupaya menutup celah tersebut dengan
+menempatkan recall kelas minoritas sebagai fokus utama evaluasi, sehingga
+model yang dihasilkan benar-benar berguna dalam praktik klinis.
+       Perkembangan teknologi informasi dan komunikasi telah membawa
+perubahan besar dalam berbagai bidang kehidupan, termasuk bidang kesehatan.
+Pemanfaatan teknologi dalam pelayanan kesehatan tidak hanya terbatas pada
+sistem informasi manajemen rumah sakit, tetapi juga berkembang ke arah analisis
+data yang lebih mendalam untuk mendukung pengambilan keputusan klinis. Data
+mining dan machine learning menjadi jembatan yang menghubungkan data
+mentah dengan pengetahuan yang dapat ditindaklanjuti (actionable knowledge),
+sehingga tenaga kesehatan dapat mengambil keputusan yang lebih cepat dan
+berbasis bukti (evidence-based practice) (Schröer et al., 2021).
+       Di sisi lain, data medis memiliki karakteristik yang heterogen, seperti data
+numerik (usia, lama pengobatan), data kategorikal (jenis kelamin, komorbiditas),
+dan data ordinal (tingkat keparahan). Penggabungan berbagai tipe data ini
+menjadi tantangan tersendiri dalam membangun model yang baik. Proses
+preprocessing yang tepat menjadi kunci untuk memastikan data dapat diproses
+oleh algoritma secara optimal. Oleh karena itu, penelitian ini menaruh perhatian
+besar pada tahapan pengolahan data awal sebelum model klasifikasi dibangun.
+
+
+
+
+                                         4
+       Penelitian ini menggunakan data rekam medis pasien MDR-TB yang
+diperoleh dari RSUD Labuang Baji, Sulawesi Selatan. Data tersebut mencakup
+variabel usia, kategori usia, jenis kelamin, status bekerja, riwayat pengobatan
+sebelumnya, efek samping obat, panduan pengobatan, tinggi badan, indeks massa
+tubuh (IMT), status gizi, kepatuhan minum obat, status merokok, riwayat
+diabetes, riwayat HIV, pemeriksaan kontak, dan komorbiditas lain sebagai
+landasan analisis. Dengan memanfaatkan teknik SMOTE untuk menyeimbangkan
+kelas dan Random Forest untuk membangun model klasifikasi, penelitian ini
+diharapkan memberikan kontribusi nyata dalam mendukung pengambilan
+keputusan klinis pada penanganan penyakit MDR-TB di Indonesia, sekaligus
+menjadi salah satu upaya percepatan pencapaian target eliminasi tuberkulosis
+sesuai strategi global terbaru (World Health Organization, 2025).
+
+B. Rumusan Masalah
+
+       Berdasarkan latar belakang yang telah dijelaskan, terdapat dua aspek
+utama yang menjadi fokus penelitian, yaitu aspek penanganan data dan aspek
+performa model. Kedua aspek tersebut saling berkaitan karena kualitas model
+sangat ditentukan oleh kesiapan data yang digunakan. Oleh karena itu, penelitian
+ini difokuskan pada permasalahan-permasalahan utama berikut:
+1. Bagaimana mengimplementasikan teknik SMOTE (Synthetic Minority Over-
+   sampling Technique) untuk mengatasi masalah ketidakseimbangan kelas (data
+   imbalance) pada dataset rekam medis pasien MDR-TB?
+2. Seberapa tinggi tingkat akurasi model Random Forest setelah penerapan
+   SMOTE dalam mendeteksi potensi kegagalan pengobatan pada kelas
+   minoritas?
+
+C. Tujuan Penelitian
+
+       Sejalan dengan rumusan masalah di atas, tujuan penelitian ini adalah:
+1. Mengimplementasikan teknik SMOTE (Synthetic Minority Over-sampling
+   Technique) untuk menyeimbangkan dataset rekam medis pasien MDR-TB.
+2. Mengukur tingkat akurasi model Random Forest setelah penerapan SMOTE
+   dalam    mengklasifikasikan    keberhasilan   pengobatan    pasien   MDR-TB,
+   khususnya pada kelas minoritas yang berisiko gagal pengobatan.
+
+
+
+                                        5
+       Dengan tercapainya tujuan tersebut, diharapkan penelitian ini memberikan
+kontribusi berupa model klasifikasi yang andal serta pemahaman mengenai
+pengaruh penanganan ketidakseimbangan data terhadap performa model Random
+Forest pada data kesehatan.
+
+D. Manfaat Penelitian
+
+       Penelitian ini diharapkan memberikan manfaat sebagai berikut:
+1. Manfaat Teoritis, yaitu menambah khazanah ilmu pengetahuan dalam
+   penerapan teknik penanganan data imbalance menggunakan SMOTE dan
+   algoritma Random Forest pada bidang kesehatan, khususnya klasifikasi
+   keberhasilan pengobatan penyakit MDR-TB. Hasil penelitian ini dapat menjadi
+   referensi bagi pengembangan model machine learning pada data kesehatan
+   yang tidak seimbang di masa mendatang.
+2. Manfaat Praktis, yaitu: (a) membantu tenaga medis dalam mengidentifikasi
+   pasien MDR-TB yang berisiko gagal pengobatan secara lebih dini dan objektif;
+   (b) menjadi bahan referensi bagi peneliti lain dalam pengembangan model
+   machine learning berbasis data klinis yang tidak seimbang; serta (c)
+   memberikan gambaran potensi pemanfaatan sistem pendukung keputusan
+   berbasis machine learning di fasilitas kesehatan.
+       Dengan tercapainya tujuan penelitian, diharapkan manfaat yang telah
+diuraikan dapat terealisasi secara nyata. Hasil penelitian tidak hanya menjadi
+karya ilmiah yang melengkapi syarat akademik, tetapi juga memberikan
+kontribusi positif bagi pengembangan sistem informasi kesehatan di Indonesia
+dalam menghadapi tantangan pengendalian penyakit MDR-TB.
+
+E. Ruang Lingkup Penelitian
+
+       Penelitian ini berfokus pada penerapan teknik SMOTE dan algoritma
+Random Forest untuk mengklasifikasikan keberhasilan pengobatan pasien MDR-
+TB berdasarkan data rekam medis. Adapun batasan dalam penelitian ini adalah
+sebagai berikut:
+1. Data yang digunakan berupa rekam medis pasien MDR-TB yang diperoleh
+   dari RSUD Labuang Baji, Sulawesi Selatan, mencakup variabel usia, kategori
+   usia, jenis kelamin, status bekerja, riwayat pengobatan sebelumnya, efek
+
+
+
+                                        6
+   samping obat, panduan pengobatan, tinggi badan, indeks massa tubuh (IMT),
+   status gizi, kepatuhan minum obat, status merokok, riwayat diabetes, riwayat
+   HIV, pemeriksaan kontak, dan komorbiditas lain.
+2. Teknik SMOTE digunakan sebagai metode penanganan ketidakseimbangan
+   kelas (data imbalance) pada dataset.
+3. Algoritma Random Forest digunakan sebagai metode klasifikasi utama.
+   Algoritma machine learning lain tidak digunakan sebagai metode pembanding
+   sehingga penelitian berfokus pada analisis performa Random Forest setelah
+   penerapan SMOTE.
+4. Tahapan penelitian meliputi preprocessing data, penerapan SMOTE,
+   pembagian data latih dan data uji, pelatihan model, pengujian model, serta
+   evaluasi performa menggunakan metrik accuracy, precision, recall, dan F1-
+   score melalui confusion matrix.
+5. Penelitian tidak membahas aspek medis secara mendalam, seperti proses
+   penegakan diagnosis klinis, pemberian terapi, maupun farmakologi obat.
+   Penelitian hanya berfokus pada pengembangan model klasifikasi berbasis
+   machine learning.
+6. Hasil penelitian ditujukan untuk kepentingan akademik serta sebagai
+   gambaran potensi penerapan SMOTE dan Random Forest dalam klasifikasi
+   keberhasilan pengobatan MDR-TB.
+        Pembatasan ruang lingkup dilakukan agar penelitian tetap terfokus dan
+hasil yang diperoleh dapat dianalisis secara mendalam tanpa kehilangan arah.
+Dengan batasan yang jelas, setiap tahapan penelitian mulai dari pengolahan data
+hingga evaluasi model dapat dilakukan secara sistematis dan hasilnya dapat
+dipertanggungjawabkan secara ilmiah.
+
+F. Sistematika Penulisan
+
+        Adapun sistematika penulisan dalam proposal ini adalah sebagai berikut:
+
+BAB I              PENDAHULUAN
+                   Bab ini berisi uraian mengenai latar belakang penelitian,
+                   rumusan masalah, tujuan penelitian, manfaat penelitian, ruang
+                   lingkup penelitian, serta sistematika penulisan. Seluruh bagian
+
+
+
+
+                                          7
+          pada bab ini berfokus pada penerapan teknik SMOTE dan
+          algoritma Random Forest untuk klasifikasi keberhasilan
+          pengobatan penyakit MDR-TB.
+
+BAB II    TINJAUAN PUSTAKA
+          Bab ini memuat landasan teori yang meliputi konsep MDR-TB,
+          klasifikasi dan machine learning, ketidakseimbangan data,
+          SMOTE, Random Forest, evaluasi model, dataset rekam medis,
+          bahasa   pemrograman,    flowchart,   validasi   model,   serta
+          hyperparameter tuning. Selain itu, bab ini juga mencakup
+          ringkasan penelitian terdahulu yang relevan serta penyusunan
+          kerangka berpikir yang mendukung pelaksanaan penelitian.
+
+BAB III   METODE PENELITIAN
+          Bab ini menjelaskan metode yang digunakan dalam penelitian,
+          mulai dari tempat dan waktu penelitian, alat dan bahan, hingga
+          perancangan sistem yang meliputi desain metode penelitian
+          serta metode algoritma SMOTE dan Random Forest yang
+          digunakan.
+
+BAB IV    HASIL DAN PEMBAHASAN
+          Bab ini akan menyajikan hasil penelitian yang meliputi proses
+          pengolahan data, implementasi SMOTE dan Random Forest,
+          hasil evaluasi model, serta analisis terhadap performa
+          klasifikasi. Pembahasan dilakukan dengan menghubungkan
+          hasil pengujian dengan teori dan penelitian sebelumnya.
+
+BAB V     PENUTUP
+          Bab ini merupakan bagian akhir yang berisi kesimpulan dari
+          hasil penelitian serta saran-saran yang dapat dijadikan acuan
+          untuk pengembangan penelitian lebih lanjut, khususnya dalam
+          penerapan SMOTE dan Random Forest untuk klasifikasi
+          keberhasilan pengobatan MDR-TB.
+
+
+
+
+                               8
+                                     BAB II
+                          TINJAUAN PUSTAKA
+
+A. Landasan Teori
+
+1. Tuberkulosis Resisten Obat (MDR-TB)
+
+         Tuberkulosis merupakan penyakit menular yang disebabkan oleh bakteri
+Mycobacterium tuberculosis dan terutama menyerang organ paru-paru. Penyakit
+ini menular melalui udara ketika pasien yang terinfeksi batuk, bersin, atau
+meludah. Pada perkembangannya, muncul varian galur bakteri yang telah kebal
+terhadap obat anti-tuberkulosis (OAT) lini pertama, yang dikenal dengan sebutan
+multidrug-resistant tuberculosis (MDR-TB). Kondisi ini terjadi ketika bakteri tidak
+lagi merespons isoniazid dan rifampisin, dua obat utama yang menjadi andalan
+dalam regimen pengobatan tuberkulosis standar (World Health Organization,
+2024).
+         Pasien MDR-TB membutuhkan pengobatan dengan durasi yang lebih
+panjang, penggunaan obat lini kedua yang lebih mahal dan lebih toksik, serta
+pemantauan yang lebih ketat dibandingkan tuberkulosis yang sensitif obat.
+Tingkat keberhasilan pengobatan MDR-TB juga umumnya lebih rendah karena
+kompleksitas regimen dan besarnya beban efek samping. Kegagalan dalam
+mengendalikan MDR-TB tidak hanya membahayakan pasien, tetapi juga
+meningkatkan risiko penularan galur super-resisten di masyarakat (World Health
+Organization, 2025).
+         Menurut laporan WHO, sekitar sepertiga dari seluruh kasus baru
+tuberkulosis yang terkonfirmasi bakteriologis di dunia merupakan kasus MDR-TB
+atau tuberkulosis yang resisten terhadap rifampisin. Tingginya angka tersebut
+menegaskan pentingnya deteksi dini dan pengelolaan yang tepat. Data dan
+informasi yang akurat mengenai karakteristik pasien sangat dibutuhkan untuk
+merancang strategi pengobatan yang efektif (World Health Organization, 2024).
+         Dalam penelitian ini, status keberhasilan pengobatan MDR-TB menjadi
+target klasifikasi yang diprediksi oleh model machine learning. Pemahaman
+terhadap karakteristik penyakit ini menjadi dasar penting dalam menentukan
+
+
+
+
+                                        9
+variabel yang digunakan, sehingga proses klasifikasi dapat memberikan hasil yang
+relevan dan dapat dipertanggungjawabkan secara ilmiah.
+
+2. Klasifikasi dan Machine Learning
+
+       Klasifikasi merupakan proses penentuan suatu objek ke dalam kelas atau
+kategori tertentu berdasarkan atribut-atributnya. Proses ini diawali dengan
+membangun aturan atau model menggunakan data latih (training data) yang telah
+memiliki label, kemudian model diuji menggunakan data uji (testing data) untuk
+menilai kemampuannya mengenali pola baru. Dalam konteks penelitian ini,
+klasifikasi digunakan untuk membedakan pasien MDR-TB berdasarkan hasil akhir
+pengobatannya (Azzahra et al., 2024).
+       Machine learning adalah cabang kecerdasan buatan yang memungkinkan
+komputer mempelajari pola dari data dan membuat prediksi tanpa pemrograman
+eksplisit. Menurut Géron (2022), machine learning merupakan bidang ilmu
+tentang pemrograman komputer agar dapat belajar dari data, yang mencakup
+pembelajaran terawasi, tak terawasi, dan penguatan. Secara umum, machine
+learning dapat dikelompokkan menjadi tiga kategori utama, yaitu:
+       a. Supervised Learning (Pembelajaran Terawasi), yaitu pendekatan yang
+menggunakan data berlabel untuk melatih model. Algoritma mempelajari
+hubungan antara fitur (input) dan label (output) sehingga mampu memprediksi
+label data baru yang belum pernah dilihat. Contoh algoritma dalam kategori ini
+antara lain decision tree, random forest, naive bayes, dan support vector machine
+(Géron, 2022).
+       b. Unsupervised Learning (Pembelajaran Tak Terawasi), yaitu pendekatan
+yang digunakan pada data tanpa label. Model mencari pola atau struktur
+tersembunyi dalam data, seperti pengelompokan (clustering) menggunakan
+algoritma K-Means atau hierarki (Géron, 2022).
+       c. Reinforcement Learning (Pembelajaran Penguatan), yaitu pendekatan di
+mana agen belajar melalui interaksi dengan lingkungan dengan menerima reward
+atau punishment atas setiap tindakan yang dilakukan (Géron, 2022).
+       Setiap algoritma supervised learning memiliki karakteristik yang berbeda
+dalam hal kompleksitas, interpretabilitas, dan ketahanan terhadap noise. Pemilihan
+algoritma yang tepat sangat bergantung pada karakteristik data dan tujuan
+
+
+
+                                        10
+penelitian. Pada penelitian ini, Random Forest dipilih karena kemampuannya
+menangani data multidimensi serta menyediakan informasi feature importance
+yang bermanfaat dalam konteks kesehatan.
+       Pada penelitian ini, pendekatan supervised learning merupakan kategori
+yang paling relevan karena permasalahan klasifikasi keberhasilan pengobatan
+MDR-TB menggunakan data berlabel. Variabel klinis dan demografis pasien
+digunakan sebagai fitur, sedangkan status keberhasilan pengobatan digunakan
+sebagai label yang akan diprediksi (Azzahra et al., 2024).
+       Secara umum, alur penerapan machine learning pada penelitian ini
+mengikuti tahapan pengumpulan data, preprocessing data, pembagian data latih
+dan data uji, pelatihan model, serta evaluasi model. Setiap tahapan memiliki peran
+yang saling bergantung. Kualitas hasil akhir sangat dipengaruhi oleh kesiapan
+data pada tahap awal, sehingga perhatian khusus diberikan pada proses
+pengolahan data sebelum model dilatih.
+
+3. Ketidakseimbangan Data (Data Imbalance)
+
+       Data imbalance adalah kondisi di mana jumlah sampel antar kelas pada
+dataset sangat tidak proporsional. Pada dataset rekam medis pasien MDR-TB,
+jumlah sampel dengan status “berhasil sembuh” umumnya jauh lebih banyak
+dibandingkan sampel dengan status “gagal”, “meninggal”, atau “putus obat”.
+Perbandingan yang sangat timpang ini membuat algoritma klasifikasi kesulitan
+mempelajari pola kelas minoritas secara optimal (Pradipta et al., 2021).
+       Beberapa      pendekatan      dapat     digunakan      untuk        menangani
+ketidakseimbangan data, antara lain undersampling yang mengurangi jumlah
+sampel kelas mayoritas, oversampling yang menambah jumlah sampel kelas
+minoritas, serta pendekatan sintetis yang menghasilkan data buatan baru.
+Undersampling berisiko membuang informasi penting dari kelas mayoritas,
+sedangkan oversampling konvensional berisiko menyebabkan overfitting karena
+hanya menduplikasi sampel yang sama secara berulang (Pradipta et al., 2021).
+       SMOTE merupakan salah satu teknik oversampling sintetis yang paling
+banyak digunakan karena mampu menghasilkan sampel baru yang logis tanpa
+duplikasi   langsung.   Dalam     penelitian   ini,   SMOTE     digunakan      untuk
+menyeimbangkan kelas pada dataset rekam medis sebelum proses pelatihan model
+
+
+
+                                         11
+Random Forest dilakukan, sehingga model dapat belajar dari representasi data
+yang lebih merata (Kurniawan & Salam, 2024).
+         Derajat ketidakseimbangan data sering diukur menggunakan rasio antara
+jumlah sampel kelas mayoritas dan kelas minoritas. Pada kasus ekstrem, rasio ini
+dapat mencapai puluhan bahkan ratusan kali lipat. Semakin tinggi rasio
+ketidakseimbangan, semakin sulit algoritma mempelajari pola kelas minoritas,
+sehingga teknik penyeimbangan menjadi semakin krusial dalam membangun
+model yang andal (Pradipta et al., 2021).
+
+4. SMOTE (Synthetic Minority Over-sampling Technique)
+
+         SMOTE adalah teknik oversampling sintetis untuk mengatasi masalah
+ketidakseimbangan kelas yang diulas secara komprehensif oleh Pradipta et al.
+(2021) serta Azhar et al. (2022). Berbeda dengan oversampling konvensional yang
+menduplikasi sampel minoritas secara langsung, SMOTE menghasilkan sampel
+sintetis baru dengan melakukan interpolasi antar sampel minoritas yang
+berdekatan berdasarkan k-nearest neighbors. Secara umum, proses kerja SMOTE
+diawali dengan menentukan sejumlah tetangga terdekat (k) untuk setiap sampel
+kelas minoritas.
+         Tahapan pertama dalam SMOTE adalah menghitung jarak antar sampel
+kelas minoritas menggunakan jarak Euclidean. Jarak Euclidean mengukur
+panjang garis lurus antara dua titik dalam ruang fitur dan dinyatakan pada
+persamaan (1) berikut:
+
+
+               √∑
+                n
+d ( x , y )=         ( x i - y i )2                                          (1)
+               i=1
+
+         dengan x dan y adalah dua sampel data, n adalah jumlah fitur, sedangkan
+xᵢ dan yᵢ masing-masing merupakan nilai fitur ke-i dari sampel x dan y.
+         Tahapan kedua, setelah diperoleh k tetangga terdekat untuk setiap sampel
+minoritas, dilakukan pembuatan sampel sintetis. Satu tetangga dipilih secara acak
+dari k tetangga tersebut, kemudian dibuat sampel baru di sepanjang garis yang
+menghubungkan sampel minoritas dengan tetangga terpilih menggunakan
+persamaan (2) berikut:
+X new = X i + λ( X zi - X i )                                                (2)
+
+
+
+
+                                        12
+       dengan X_new adalah sampel sintetis baru, Xᵢ adalah sampel minoritas
+yang terpilih, X_zi adalah tetangga terdekat dari Xᵢ, dan λ adalah bilangan acak
+dalam interval (0, 1). Proses ini diulang hingga jumlah sampel kelas minoritas
+mencapai jumlah yang diinginkan.
+       Dalam implementasinya, SMOTE memiliki parameter utama berupa
+sampling_strategy yang menentukan jumlah sampel sintetis yang akan dibuat,
+serta k_neighbors yang menentukan jumlah tetangga terdekat yang digunakan
+dalam proses interpolasi. Nilai parameter ini disesuaikan dengan karakteristik
+dataset sehingga keseimbangan kelas dapat tercapai tanpa mengorbankan kualitas
+data (Pradipta et al., 2021).
+       SMOTE memiliki keunggulan dalam menghasilkan sampel sintetis yang
+beragam dan logis, namun juga memiliki keterbatasan. Apabila kualitas data awal
+buruk atau terdapat banyak noise, SMOTE berpotensi memperkuat pola noise pada
+kelas minoritas (Azhar et al., 2022). Oleh karena itu, kebersihan data melalui
+preprocessing yang baik menjadi prasyarat penting sebelum teknik SMOTE
+diterapkan.
+       Melalui mekanisme interpolasi tersebut, SMOTE memperkaya ruang fitur
+kelas minoritas sehingga model dapat mempelajari pola yang lebih representatif
+tanpa mengalami overfitting. Hasil penyeimbangan ini menjadikan model lebih
+sensitif terhadap pasien yang berisiko gagal pengobatan. Alur kerja penerapan
+SMOTE secara umum ditunjukkan pada Gambar 1.
+
+
+
+
+                                      13
+                        Gambar 1. Alur Kerja SMOTE
+
+5. Random Forest
+
+       Random Forest merupakan algoritma ensemble learning (Mienye & Sun,
+2022). Algoritma ini menggabungkan sejumlah besar pohon keputusan (decision
+tree) yang dilatih menggunakan teknik bootstrap aggregating (bagging) serta
+pemilihan fitur secara acak pada setiap percabangan. Setiap pohon memberikan
+suara (voting) terhadap hasil klasifikasi, dan hasil akhir ditentukan berdasarkan
+mayoritas suara dari seluruh pohon.
+       Di samping keunggulannya, Random Forest juga memiliki beberapa
+keterbatasan, antara lain ukuran model yang relatif besar dan waktu komputasi
+yang lebih lama dibandingkan algoritma yang lebih sederhana. Namun,
+keterbatasan tersebut dapat diterima karena dataset pada penelitian ini berukuran
+relatif kecil hingga menengah, sehingga waktu komputasi tidak menjadi kendala
+
+
+
+
+                                       14
+yang berarti. Interpretabilitas model juga dapat dibantu melalui pemanfaatan fitur
+feature importance.
+           Dalam proses pembentukan pohon keputusan, digunakan pengukuran
+kemurnian simpul (node impurity) untuk menentukan fitur pemisah yang paling
+baik. Dua ukuran yang umum digunakan adalah indeks Gini dan entropi. Indeks
+Gini dihitung menggunakan persamaan (3) berikut:
+              K
+Gini = 1 - ∑ p2k                                                                 (3)
+             k =1
+
+           dengan K adalah jumlah kelas dan pₖ adalah proporsi sampel kelas k pada
+suatu simpul. Semakin kecil nilai indeks Gini, semakin murni pembagian simpul
+tersebut. Adapun entropi dihitung menggunakan persamaan (4) berikut:
+       K
+E = - ∑ p k log 2 p k                                                            (4)
+      k =1
+
+           dengan pₖ adalah proporsi sampel kelas k pada suatu simpul. Nilai entropi
+yang semakin kecil menunjukkan simpul yang semakin murni.
+           Setelah sejumlah T pohon keputusan terbentuk, hasil klasifikasi akhir
+ditentukan melalui voting mayoritas (majority voting) dari seluruh pohon
+menggunakan persamaan (5) berikut:
+^y = mode {h1 ( x ), h2 ( x ), … , hT ( x )}                                     (5)
+           dengan ŷ adalah hasil akhir klasifikasi, hₜ(x) adalah hasil prediksi pohon
+ke-t untuk sampel x, dan mode merupakan nilai yang paling sering muncul.
+Arsitektur Random Forest secara umum ditunjukkan pada Gambar 2.
+
+
+
+
+                                               15
+                    Gambar 2. Arsitektur Random Forest
+
+       Keunggulan Random Forest terletak pada kemampuannya menangani data
+berdimensi tinggi, stabil terhadap noise dan outlier, serta menyediakan informasi
+feature importance yang menunjukkan kontribusi setiap variabel terhadap
+prediksi. Fitur ini sangat berguna dalam penelitian medis karena dapat memetakan
+variabel klinis dan demografis yang paling berpengaruh terhadap keberhasilan
+pengobatan pasien MDR-TB (Zhang dkk, 2025).
+
+6. Evaluasi Klasifikasi
+
+       Evaluasi merupakan tahapan untuk menilai sejauh mana model mampu
+menghasilkan klasifikasi yang sesuai dengan kondisi sebenarnya. Pada penelitian
+ini, evaluasi dilakukan dengan membandingkan hasil prediksi model terhadap
+label sebenarnya menggunakan confusion matrix yang terdiri atas True Positive
+(TP), True Negative (TN), False Positive (FP), dan False Negative (FN). True
+Positive adalah jumlah data positif yang diprediksi benar, True Negative adalah
+jumlah data negatif yang diprediksi benar, False Positive adalah jumlah data
+
+
+
+
+                                       16
+negatif yang diprediksi positif, dan False Negative adalah jumlah data positif yang
+diprediksi negatif.
+          Berdasarkan       confusion   matrix       tersebut,    performa     model    diukur
+menggunakan metrik accuracy, precision, recall, dan F1-score. Accuracy
+menggambarkan            ketepatan   klasifikasi     secara      keseluruhan   dan     dihitung
+menggunakan persamaan (6) berikut:
+                    TP + TN
+Accuracy =                                                                                 (6)
+               TP + TN + FP + FN
+          Precision mengukur ketepatan prediksi positif dan dihitung menggunakan
+persamaan (7) berikut:
+                 TP
+Precision =                                                                                (7)
+               TP + FP
+          Recall mengukur kemampuan model dalam menemukan seluruh data
+positif dan dihitung menggunakan persamaan (8) berikut:
+              TP
+Recall =                                                                                   (8)
+            TP + FN
+          F1-score memberikan keseimbangan antara precision dan recall dan
+dihitung menggunakan persamaan (9) berikut:
+          Precision · Recall
+F1 = 2·                                                                                    (9)
+          Precision + Recall
+          Pada penelitian ini, recall menjadi perhatian utama karena kemampuan
+mendeteksi pasien yang berisiko gagal pengobatan lebih penting daripada akurasi
+keseluruhan. Model dengan recall tinggi mampu meminimalkan false negative,
+yaitu pasien yang berisiko gagal namun tidak terdeteksi oleh model (Kurniawan &
+Salam, 2024).
+          Interpretasi     metrik    evaluasi      perlu   disesuaikan       dengan    konteks
+permasalahan. Pada dataset dengan kelas yang tidak seimbang, accuracy bukanlah
+metrik yang ideal karena dapat menyesatkan. Sebagai contoh, model yang
+memprediksi seluruh sampel sebagai kelas mayoritas akan memperoleh accuracy
+yang tinggi padahal sama sekali tidak mampu mendeteksi kelas minoritas. Oleh
+karena itu, perhatian utama dalam evaluasi penelitian ini diberikan pada recall dan
+F1-score kelas minoritas (Kurniawan & Salam, 2024).
+
+
+
+
+                                                17
+7. Dataset dan Rekam Medis
+
+         Rekam medis merupakan dokumen yang memuat catatan dan informasi
+tentang identitas pasien, pemeriksaan, diagnosis, pengobatan, serta pelayanan lain
+yang diberikan kepada pasien. Data rekam medis memiliki potensi besar sebagai
+sumber analisis dalam bidang kesehatan, termasuk untuk membangun model
+prediktif berbasis machine learning. Kualitas dataset sangat menentukan kinerja
+model, sehingga diperlukan proses preprocessing untuk membersihkan data,
+menangani nilai yang hilang, dan memastikan kesesuaian format data (Géron,
+2022).
+         Pada penelitian ini, dataset yang digunakan adalah data rekam medis
+pasien MDR-TB yang diperoleh dari RSUD Labuang Baji, Sulawesi Selatan. Data
+mencakup variabel usia, kategori usia, jenis kelamin, status bekerja, riwayat
+pengobatan sebelumnya, efek samping obat, panduan pengobatan, tinggi badan,
+indeks massa tubuh (IMT), status gizi, kepatuhan minum obat, status merokok,
+riwayat diabetes, riwayat HIV, pemeriksaan kontak, dan komorbiditas lain.
+Seluruh variabel tersebut digunakan sebagai fitur dalam model klasifikasi untuk
+memprediksi keberhasilan pengobatan pasien MDR-TB.
+         Beberapa contoh atribut yang umum tersedia pada rekam medis pasien
+MDR-TB antara lain usia, jenis kelamin, status gizi, komorbiditas, hasil
+pemeriksaan dahak, lama menderita tuberkulosis sebelum diagnosis MDR-TB,
+riwayat pengobatan sebelumnya, serta hasil akhir pengobatan. Atribut hasil akhir
+pengobatan inilah yang menjadi label kelas dalam proses klasifikasi, sedangkan
+atribut lainnya berperan sebagai fitur yang memengaruhi prediksi.
+
+8. Bahasa Pemrograman dan Tools
+
+         Bahasa pemrograman yang digunakan dalam penelitian ini adalah Python.
+Python dipilih karena memiliki ekosistem pustaka yang lengkap untuk analisis
+data dan machine learning, serta sintaks yang sederhana sehingga memudahkan
+peneliti dalam mengolah data, membangun model, dan mengevaluasi hasil
+
+
+
+
+                                       18
+klasifikasi. Python juga memiliki komunitas pengguna yang besar sehingga
+dokumentasi dan dukungan pengembangannya sangat memadai.
+       Pustaka Pandas digunakan untuk membaca, membersihkan, dan
+mengelola dataset yang disimpan dalam format Excel (XLSX). NumPy digunakan
+untuk mendukung perhitungan numerik, sedangkan pustaka                 scikit-learn
+digunakan untuk membangun model Random Forest dan menghitung metrik
+evaluasi   (Nurhaliza     et   al.,   2025).    Teknik   SMOTE   diimplementasikan
+menggunakan pustaka imbalanced-learn yang menyediakan implementasi
+SMOTE secara siap pakai (Kurniawan et al., 2024).
+       Untuk kebutuhan visualisasi, digunakan pustaka Matplotlib dan Seaborn
+yang mampu menghasilkan grafik dan diagram yang informatif. Seluruh proses
+pengembangan dilakukan menggunakan Visual Studio Code sebagai lingkungan
+pengembangan (integrated development environment), yang mendukung penulisan
+kode, pengujian, dan debugging secara terintegrasi.
+       Seluruh pustaka yang digunakan bersifat open source dan tersedia secara
+luas, sehingga hasil penelitian dapat direproduksi oleh peneliti lain dengan mudah.
+Dokumentasi resmi masing-masing pustaka juga sangat lengkap, yang
+memudahkan proses pengembangan dan penyelesaian kendala teknis selama
+penelitian berlangsung.
+       Untuk membangun aplikasi web yang mengelola data dan menyajikan
+hasil klasifikasi kepada pengguna, penelitian ini menggunakan framework Laravel
+yang ditulis dengan bahasa pemrograman PHP serta MySQL sebagai sistem
+manajemen basis data. Laravel menyediakan struktur Model-View-Controller
+(MVC) yang rapi dan aman, sehingga memudahkan pengembangan sistem
+informasi pengelolaan data rekam medis, penginputan data pasien, serta penyajian
+hasil prediksi model. Model Random Forest yang telah dibangun dengan Python
+kemudian diintegrasikan ke dalam aplikasi web tersebut melalui sebuah
+Application Programming Interface (API), sehingga hasil klasifikasi dapat diakses
+secara langsung oleh pengguna melalui antarmuka web (Alimi et al., 2024).
+
+9. Flowchart
+
+       Flowchart adalah representasi grafis yang menggambarkan alur atau
+langkah-langkah dalam suatu proses secara terstruktur menggunakan simbol-
+
+
+
+                                           19
+simbol baku. Diagram ini membantu menjelaskan urutan aktivitas, keputusan, dan
+hubungan antarproses sehingga memudahkan peneliti maupun pembaca dalam
+memahami alur penelitian. Penggunaan flowchart sangat penting dalam
+perancangan sistem karena mampu mengkomunikasikan logika proses secara jelas
+dan sistematis. Definisi ini selaras dengan Ginting (2023) yang menyatakan
+bahwa flowchart (diagram alir) merupakan bagan yang menunjukkan alir (flow) di
+dalam program atau prosedur sistem secara logika.
+       Simbol-simbol yang umum digunakan dalam flowchart ditunjukkan pada
+Tabel 1.
+       Berdasarkan orientasinya, flowchart dapat berbentuk vertikal yang
+mengalir dari atas ke bawah, horizontal yang mengalir dari kiri ke kanan, atau
+campuran keduanya. Pada penelitian ini, flowchart metode disusun secara vertikal
+untuk memudahkan pembacaan urutan langkah penelitian yang bersifat
+sekuensial.
+
+                          Tabel 1. Simbol Flowchart
+
+
+     Simbol            Nama Simbol                       Fungsi
+
+                    Terminator              Menunjukkan awal (start) dan akhir
+                                            (end) dari suatu proses atau
+                                            algoritma.
+
+                    Process (Proses)        Menunjukkan aktivitas atau
+                                            langkah kerja yang dilakukan
+                                            dalam suatu proses.
+
+                    Decision                Digunakan untuk menunjukkan
+                    (Keputusan)             proses pengambilan keputusan
+                                            berdasarkan suatu kondisi,
+                                            misalnya Ya atau Tidak.
+
+                    Input / Output          Menunjukkan proses memasukkan
+                                            data (input) atau menghasilkan
+                                            keluaran (output).
+
+                    Connector               Digunakan untuk menghubungkan
+                                            alur yang terputus atau berpindah
+
+
+
+
+                                       20
+     Simbol             Nama Simbol                           Fungsi
+
+                                                ke bagian lain dari flowchart.
+
+                    Flow Line                   Menunjukkan arah aliran proses
+                                                dari satu simbol ke simbol lainnya.
+
+
+
+10. Validasi Model dan Cross-Validation
+
+       Validasi model merupakan tahapan penting untuk menilai kemampuan
+model dalam menggeneralisasi pola pada data yang belum pernah dilihat. Model
+yang hanya berkinerja baik pada data latih tetapi buruk pada data baru disebut
+mengalami overfitting. Untuk mengatasi hal ini, data dibagi menjadi data latih
+(training set) dan data uji (testing set) dengan proporsi yang wajar, misalnya 80%
+untuk data latih dan 20% untuk data uji.
+       Selain pembagian data secara sederhana, teknik k-fold cross-validation
+dapat digunakan untuk memperoleh estimasi performa model yang lebih stabil.
+Pada teknik ini, data dibagi menjadi k bagian (fold) yang sama besar. Model
+dilatih pada k−1 fold dan diuji pada 1 fold yang tersisa. Proses ini diulang
+sebanyak k kali dengan fold pengujian yang berbeda, kemudian hasilnya dirata-
+ratakan. Teknik ini mengacu pada Géron (2022) yang menunjukkan bahwa cross-
+validation merupakan metode untuk mengestimasi keakuratan model pada data
+yang belum pernah terlibat dalam proses pelatihan.
+       Pada penelitian ini, proses pembagian data dilakukan sebelum penerapan
+SMOTE. Hal ini bertujuan untuk mencegah terjadinya kebocoran data (data
+leakage), yaitu kondisi di mana informasi dari data uji ikut memengaruhi proses
+pelatihan model. SMOTE hanya diterapkan pada data latih sehingga evaluasi
+model pada data uji tetap mencerminkan kondisi riil.
+       Metode holdout (pembagian tunggal menjadi data latih dan data uji) dipilih
+sebagai pendekatan utama karena sederhana dan sesuai dengan karakteristik data
+penelitian. Teknik k-fold cross-validation digunakan sebagai pendekatan
+pendukung untuk memperoleh gambaran stabilitas performa model pada berbagai
+pembagian data.
+
+
+
+
+                                           21
+11. Hyperparameter Tuning
+
+       Kinerja algoritma Random Forest sangat dipengaruhi oleh pemilihan
+hyperparameter. Beberapa hyperparameter penting pada Random Forest antara
+lain n_estimators (jumlah pohon keputusan yang dibangun), max_depth
+(kedalaman maksimum setiap pohon), min_samples_split (jumlah minimum
+sampel untuk melakukan percabangan), serta random_state (nilai acak untuk
+memastikan hasil dapat direproduksi).
+       Untuk memperoleh kombinasi hyperparameter yang optimal, digunakan
+teknik grid search yang menguji seluruh kombinasi nilai pada ruang parameter
+yang telah ditentukan. Kombinasi yang menghasilkan performa terbaik
+berdasarkan metrik evaluasi kemudian dipilih sebagai konfigurasi model akhir.
+Dengan tuning hyperparameter yang tepat, performa model diharapkan dapat
+meningkat secara signifikan tanpa mengalami overfitting (Zhang dkk, 2025).
+
+12. Confusion Matrix
+
+       Confusion matrix merupakan tabel yang menggambarkan kinerja model
+klasifikasi terhadap data uji. Matriks ini membandingkan hasil prediksi model
+dengan nilai sebenarnya (aktual) dan disusun dalam empat komponen utama,
+yaitu True Positive (TP), True Negative (TN), False Positive (FP), dan False
+Negative (FN). Keempat komponen tersebut menjadi dasar perhitungan berbagai
+metrik evaluasi seperti accuracy, precision, recall, dan F1-score (Kurniawan &
+Salam, 2024).
+       Pada penelitian ini, kelas yang dianggap sebagai kelas positif adalah
+pasien dengan status gagal pengobatan (kelas minoritas). Dengan demikian, False
+Negative (FN), yaitu pasien yang berisiko gagal tetapi diprediksi berhasil oleh
+model, menjadi kesalahan yang paling dihindari. Dengan memahami struktur
+confusion matrix, hasil evaluasi dapat diinterpretasikan secara lebih mendalam
+dan tidak hanya berfokus pada satu metrik tunggal.
+
+13. Feature Importance
+
+       Feature importance merupakan salah satu keunggulan utama algoritma
+Random Forest. Fitur ini memberikan nilai pentingnya setiap variabel terhadap
+hasil prediksi model. Semakin besar nilai feature importance suatu variabel,
+
+
+
+                                        22
+semakin besar pengaruh variabel tersebut terhadap keputusan klasifikasi.
+Informasi ini diperoleh dari rata-rata penurunan kemurnian simpul (impurity) yang
+diakibatkan oleh setiap variabel pada seluruh pohon dalam hutan (Saarela &
+Jauhiainen, 2021).
+       Dalam konteks penelitian ini, feature importance dapat digunakan untuk
+mengidentifikasi faktor-faktor yang paling berpengaruh terhadap keberhasilan
+pengobatan pasien MDR-TB, misalnya usia, komorbiditas, atau riwayat
+pengobatan sebelumnya. Informasi ini sangat berharga bagi tenaga medis untuk
+memahami determinan keberhasilan pengobatan secara lebih komprehensif
+sekaligus menjadi bahan evaluasi terhadap kualitas data yang digunakan (Zhang
+dkk, 2025).
+
+14. Preprocessing Data
+
+       Preprocessing data merupakan tahapan penting sebelum data digunakan
+dalam pelatihan model. Tahapan ini bertujuan membersihkan dan menyiapkan
+data agar sesuai dengan kebutuhan algoritma. Tanpa preprocessing yang baik,
+kualitas model akan menurun meskipun algoritma yang digunakan sangat
+canggih. Oleh karena itu, preprocessing menjadi fondasi yang menentukan
+keberhasilan seluruh proses klasifikasi.
+       Langkah pertama dalam preprocessing adalah data cleaning, yaitu
+penanganan nilai yang hilang (missing values), data ganda (duplikat), dan data
+yang tidak konsisten. Nilai yang hilang dapat diatasi dengan menghapus baris data
+atau mengisi dengan nilai rata-rata (mean) untuk data numerik atau nilai yang
+paling sering muncul (mode) untuk data kategorikal.
+       Langkah berikutnya adalah transformasi data, yaitu encoding data
+kategorikal menjadi bentuk numerik yang dapat diproses oleh algoritma.
+Normalisasi juga dilakukan untuk menyamakan skala antar fitur sehingga tidak
+ada fitur yang mendominasi proses perhitungan jarak, khususnya pada penerapan
+SMOTE yang menggunakan jarak Euclidean dalam menentukan tetangga terdekat
+(Kurniawan & Salam, 2024).
+
+15. Decision Tree sebagai Dasar Random Forest
+
+
+
+
+                                           23
+           Random Forest dibangun di atas kumpulan pohon keputusan (decision
+tree). Pohon keputusan merupakan struktur yang menyerupai diagram alir, di
+mana setiap simpul internal (internal node) merepresentasikan pengujian terhadap
+suatu fitur, setiap cabang merepresentasikan hasil pengujian, dan setiap daun
+(leaf) merepresentasikan label kelas. Pembentukan pohon dilakukan dengan
+memilih fitur pemisah yang menghasilkan pembagian data yang paling murni
+(Mienye & Sun, 2022).
+           Pemilihan fitur pemisah dilakukan menggunakan ukuran kemurnian
+simpul seperti indeks Gini dan entropi, sebagaimana dijelaskan pada persamaan
+(3) dan (4). Semakin murni pembagian yang dihasilkan oleh suatu fitur, semakin
+baik fitur tersebut dijadikan pemisah pada simpul yang bersangkutan. Proses
+pembagian dilakukan secara rekursif hingga tercapai kondisi berhenti tertentu,
+misalnya kedalaman maksimum atau jumlah sampel minimum pada simpul.
+           Meskipun pohon keputusan tunggal mudah diinterpretasikan, algoritma ini
+cenderung mengalami overfitting ketika pohon tumbuh terlalu dalam. Random
+Forest mengatasi kelemahan ini dengan membangun banyak pohon secara acak
+dan menggabungkan hasilnya melalui voting, sehingga varians model dapat
+dikurangi secara signifikan tanpa meningkatkan bias secara berlebihan (Mienye &
+Sun, 2022).
+
+16. Penanganan Alternatif Ketidakseimbangan Data
+
+           Selain SMOTE, terdapat beberapa teknik lain yang umum digunakan untuk
+menangani ketidakseimbangan data. Undersampling mengurangi jumlah sampel
+kelas mayoritas secara acak agar seimbang dengan kelas minoritas. Pendekatan ini
+sederhana dan cepat, namun berisiko membuang informasi penting yang
+terkandung pada sampel kelas mayoritas sehingga dapat menurunkan performa
+model.
+           Oversampling konvensional (random oversampling) menambah jumlah
+sampel kelas minoritas dengan menduplikasi sampel yang sudah ada secara acak.
+Pendekatan ini menyeimbangkan distribusi kelas, tetapi cenderung menyebabkan
+overfitting karena model mempelajari pola yang sama secara berulang tanpa
+variasi.
+
+
+
+
+                                         24
+       Pendekatan      hibrida   menggabungkan    teknik   undersampling     dan
+oversampling sekaligus, misalnya SMOTE-Tomek dan SMOTE-ENN. SMOTE-
+Tomek menerapkan SMOTE kemudian membersihkan sampel yang dianggap
+sebagai noise menggunakan metode Tomek link, sedangkan SMOTE-ENN
+menggabungkan SMOTE dengan pembersihan menggunakan k-nearest neighbors
+(Hairani et al., 2023; Nurhaliza et al., 2025).
+       Pada penelitian ini, SMOTE dipilih karena mampu menghasilkan sampel
+sintetis baru yang logis dan dapat mengurangi risiko overfitting dibandingkan
+oversampling konvensional. Pendekatan lain seperti SMOTE-ENN dapat menjadi
+bahan pengembangan penelitian selanjutnya untuk membandingkan efektivitas
+berbagai teknik penyeimbangan data.
+
+17. Data Mining dan CRISP-DM
+
+       Data mining merupakan proses menemukan pola yang menarik dan
+bermanfaat dari data dalam jumlah besar. Dalam konteks kesehatan, data mining
+digunakan untuk menganalisis rekam medis, menemukan hubungan antar variabel
+klinis, serta membangun model prediktif untuk mendukung diagnosis dan
+prognosis penyakit (Schröer et al., 2021).
+       Salah satu metodologi standar dalam pengembangan proyek data mining
+adalah CRISP-DM (Cross-Industry Standard Process for Data Mining). CRISP-
+DM terdiri atas enam fase, yaitu business understanding, data understanding, data
+preparation, modeling, evaluation, dan deployment. Kerangka kerja ini
+memberikan panduan sistematis agar proses pengolahan data hingga penerapan
+model berjalan terstruktur dan terdokumentasi dengan baik. Penjelasan fase-fase
+CRISP-DM tersebut mengacu pada Schröer et al. (2021).
+       Alur penelitian ini sejalan dengan fase-fase CRISP-DM. Fase pemahaman
+masalah dan tujuan penelitian berkaitan dengan business understanding,
+pengumpulan dan eksplorasi data rekam medis berkaitan dengan data
+understanding, preprocessing data berkaitan dengan data preparation, penerapan
+SMOTE dan Random Forest berkaitan dengan modeling, evaluasi metrik
+klasifikasi berkaitan dengan evaluation, serta penyusunan laporan berkaitan
+dengan deployment.
+
+
+
+
+                                          25
+18. Perbandingan Algoritma Klasifikasi
+
+       Terdapat berbagai algoritma klasifikasi yang dapat digunakan untuk
+memprediksi hasil pengobatan, antara lain decision tree, naive bayes, k-nearest
+neighbors (k-NN), support vector machine (SVM), dan random forest. Setiap
+algoritma memiliki kelebihan dan kekurangan yang bergantung pada karakteristik
+data dan tujuan penelitian. Studi komparatif pada data tuberkulosis menunjukkan
+bahwa algoritma decision tree C4.5 dan naive bayes dapat digunakan untuk
+klasifikasi (Isnaeni et al., 2024), termasuk prognosis masa pengobatan pasien
+(Rusdah & Bregastantyo, 2023).
+       Decision tree mudah diinterpretasikan tetapi rentan terhadap overfitting.
+Naive bayes cepat dan sederhana namun mengasumsikan independensi antar fitur
+yang jarang terpenuhi pada data medis. k-NN sederhana namun sensitif terhadap
+skala fitur dan biaya komputasi yang tinggi pada data besar. SVM efektif pada
+data berdimensi tinggi tetapi sulit diinterpretasikan.
+       Random Forest dipilih dalam penelitian ini karena mampu menangani data
+multidimensi, stabil terhadap noise dan outlier, tahan terhadap overfitting melalui
+mekanisme ensemble, serta menyediakan informasi feature importance yang
+sangat bermanfaat dalam analisis data kesehatan (Mienye & Sun, 2022; Triloka &
+Sugianto, 2025; Zhang dkk, 2025).
+
+19. Etika dan Privasi Data Kesehatan
+
+       Penggunaan data kesehatan dalam penelitian wajib memerhatikan aspek
+etika dan privasi. Data rekam medis merupakan data yang bersifat sensitif dan
+dilindungi   oleh   peraturan    perundang-undangan.     Peneliti   harus   menjaga
+kerahasiaan identitas pasien dan hanya menggunakan data yang relevan dengan
+keperluan penelitian. Perlindungan data pribadi di Indonesia diatur dalam
+Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi, yang
+menegaskan bahwa data kesehatan tergolong data pribadi yang bersifat spesifik
+sehingga penggunaannya wajib dilindungi dan memperoleh persetujuan dari
+pemilik data.
+       Pada penelitian ini, seluruh proses pengolahan data dilakukan dengan
+mengedepankan prinsip keamanan dan kerahasiaan. Identitas pasien tidak
+
+
+
+
+                                          26
+ditampilkan dalam laporan, dan data diproses secara agregat sesuai tujuan analisis.
+Hal ini sejalan dengan ketentuan etika penelitian kesehatan yang berlaku.
+        Selain itu, izin penggunaan data diperoleh melalui mekanisme resmi dari
+pihak RSUD Labuang Baji, Sulawesi Selatan. Dokumentasi perizinan menjadi
+bagian penting dalam menjamin keabsahan data dan keberlanjutan penelitian.
+
+
+
+
+20. Sistem Pendukung Keputusan Berbasis Machine Learning
+
+        Sistem pendukung keputusan (SPK) merupakan sistem berbasis komputer
+yang membantu pengambil keputusan dalam mengevaluasi berbagai alternatif dan
+membuat keputusan yang lebih baik. Dalam bidang kesehatan, SPK berbasis
+machine learning dapat membantu tenaga medis dalam mendiagnosis penyakit,
+memprediksi hasil pengobatan, serta merekomendasikan tindakan penanganan.
+        Model klasifikasi yang dihasilkan pada penelitian ini berpotensi
+dikembangkan     menjadi    SPK    untuk     mendukung    tenaga    medis   dalam
+mengidentifikasi pasien MDR-TB yang berisiko gagal pengobatan. Melalui
+prediksi yang cepat dan berbasis data, intervensi medis dapat dilakukan lebih awal
+sehingga peluang keberhasilan pengobatan meningkat. Agar model mudah
+digunakan oleh tenaga medis, SPK direncanakan dibangun sebagai aplikasi web
+menggunakan framework Laravel dengan basis data MySQL, yang memanggil
+model Random Forest berbasis Python melalui sebuah Application Programming
+Interface (API) sehingga hasil prediksi dapat ditampilkan secara langsung (Alimi
+et al., 2024).
+        Pemanfaatan SPK tidak dimaksudkan untuk menggantikan peran tenaga
+medis, melainkan sebagai alat bantu yang menyediakan informasi tambahan
+dalam proses pengambilan keputusan. Keputusan akhir tetap berada pada tenaga
+medis yang memiliki pengetahuan klinis dan pengalaman dalam menangani
+pasien (Zhang dkk, 2025).
+
+21. Use Case
+
+        Use case merupakan salah satu teknik pemodelan dalam rekayasa
+perangkat lunak yang menggambarkan interaksi antara aktor dengan sistem untuk
+
+
+
+
+                                        27
+mencapai tujuan tertentu. Dalam konteks penelitian ini, use case digunakan untuk
+memetakan kebutuhan fungsional sistem pendukung keputusan, yaitu bagaimana
+tenaga medis sebagai pengguna berinteraksi dengan model klasifikasi untuk
+memperoleh informasi mengenai risiko keberhasilan pengobatan pasien MDR-
+TB. Definisi ini merujuk pada Asrin (2023) yang menggambarkan use case
+diagram sebagai diagram untuk memodelkan perilaku sistem melalui interaksi
+antara satu atau lebih aktor yang akan menggunakan sistem.
+         Aktor utama pada sistem ini adalah tenaga medis di RSUD Labuang Baji,
+Sulawesi Selatan. Skenario utama yang digambarkan dalam use case dimulai
+ketika tenaga medis memasukkan data pasien MDR-TB berupa fitur-fitur klinis
+dan demografis ke dalam sistem. Sistem kemudian memproses data tersebut
+menggunakan model Random Forest yang telah dilatih pada data seimbang untuk
+menghasilkan output berupa kelas prediksi, yaitu status gagal pengobatan atau
+berhasil pengobatan. Berdasarkan output tersebut, tenaga medis memperoleh
+dukungan informasi yang dapat digunakan sebagai pertimbangan dalam
+pengambilan keputusan klinis.
+
+B. Penelitian Terkait
+
+         Penulis menggali banyak inspirasi dan referensi untuk menyusun proposal
+ini melalui penelitian sebelumnya yang terkait dengan permasalahan yang diteliti.
+Penelitian sebelumnya yang menjadi fokus ditunjukkan pada Tabel 2.
+
+                              Tabel 2. Penelitian Terkait
+
+  Peneliti &                 Judul                 Metode              Hasil
+    Tahun
+Triloka &          Klasifikasi Keberhasilan    Random       Klasifikasi tingkat
+Sugianto           Pengobatan Pasien           Forest       keberhasilan pengobatan
+(2025)             Tuberkulosis Paru                        pasien tuberkulosis paru
+                   Menggunakan Algoritma                    berbasis data klinis.
+                   Random Forest
+Nurhaliza et al.   Klasifikasi Tuberkulosis    Random       Kombinasi resampling
+(2025)             (TBC) dengan Metode         Forest +     ADASYN dan pembersihan
+                   Random Forest               ADASYN-      Tomek Links meningkatkan
+                   Menggunakan Teknik Re-      Tomek        F1-score kelas positif dari
+                   Sampling ADASYN-Tomek                    0,67 menjadi 0,71 pada
+                   Links                                    evaluasi hold-out serta
+                                                            mencapai 0,9129 pada
+                                                            cross-validation untuk
+                                                            mengatasi
+                                                            ketidakseimbangan data
+
+
+
+
+                                              28
+  Peneliti &               Judul                 Metode                 Hasil
+   Tahun
+                                                              klasifikasi TBC.
+Widjaja et al.   The Comparison between        Logistic       Membandingkan kinerja
+(2025)           Logistic Regression and       Regression &   logistic regression dan
+                 Convolutional Neural          CNN            convolutional neural
+                 Network for Multi-Drug                       network dalam
+                 Resistant Tuberculosis                       memprediksi MDR-TB, di
+                 Prediction                                   mana keduanya
+                                                              menunjukkan performa
+                                                              yang kompetitif pada data
+                                                              klinis.
+Azzahra et al.   Ensemble Klasifikasi          Ensemble K-    Kombinasi ensemble tiga
+(2024)           Penyakit Tuberculosis pada    NN, Decision   algoritma untuk
+                 Hasil Pengobatan              Tree, dan      mengklasifikasikan hasil
+                 Menggunakan Metode            SVM            pengobatan tuberkulosis
+                 Hybrid K-NN, Decision                        dan meningkatkan akurasi
+                 Tree, dan SVM                                prediksi.
+Hairani et al.   Improvement Performance of    Random         Penerapan SMOTE-Tomek
+(2023)           the Random Forest Method      Forest +       Link meningkatkan
+                 on Unbalanced Diabetes Data   SMOTE-         performa Random Forest
+                 Classification Using          Tomek          pada data tidak seimbang,
+                 SMOTE-Tomek Link                             menunjukkan efektivitas
+                                                              teknik resampling sebelum
+                                                              klasifikasi.
+
+         Persamaan antara penelitian pertama dengan penelitian ini terletak pada
+fokus pengelompokan tingkat keberhasilan pengobatan pasien tuberkulosis
+menggunakan algoritma Random Forest dengan data klinis. Perbedaannya terletak
+pada penggunaan teknik penanganan ketidakseimbangan data; penelitian ini
+mengintegrasikan teknik SMOTE untuk meningkatkan performa model pada kelas
+minoritas, sedangkan penelitian tersebut menggunakan data asli tanpa proses
+penyeimbangan sampel.
+         Penelitian kedua memiliki kesamaan dalam objek penelitian, yaitu
+klasifikasi hasil akhir pengobatan pada pasien MDR-TB berdasarkan data klinis
+dan rekam medis pasien. Perbedaannya terletak pada metodologi penanganan
+data; penelitian tersebut menggunakan dataset apa adanya tanpa teknik
+penyeimbangan, sedangkan penelitian ini mengintegrasikan teknik SMOTE untuk
+mengatasi ketidakseimbangan data antara pasien yang berhasil sembuh dan yang
+gagal pengobatan guna meningkatkan sensitivitas model.
+         Penelitian ketiga (Widjaja et al., 2025) memiliki kesamaan dalam objek
+penelitian, yaitu prediksi penyakit MDR-TB menggunakan pendekatan machine
+learning. Perbedaannya terletak pada algoritma yang digunakan; penelitian
+
+
+
+
+                                           29
+tersebut membandingkan logistic regression dengan convolutional neural network
+(CNN), sedangkan penelitian ini menggunakan Random Forest sebagai model
+klasifikasi dengan didahului penanganan ketidakseimbangan data menggunakan
+SMOTE.
+       Penelitian keempat (Azzahra et al., 2024) menerapkan metode ensemble
+yang menggabungkan algoritma K-Nearest Neighbor (K-NN), Decision Tree, dan
+Support Vector Machine (SVM) untuk mengklasifikasikan hasil pengobatan
+pasien tuberkulosis. Kesamaan dengan penelitian ini terletak pada fokus
+klasifikasi hasil pengobatan tuberkulosis. Perbedaannya terletak pada pendekatan
+metode; penelitian tersebut mengombinasikan beberapa algoritma, sedangkan
+penelitian ini menggunakan Random Forest yang didahului teknik SMOTE.
+       Penelitian kelima (Hairani et al., 2023) menjadi dasar penerapan
+kombinasi teknik resampling dengan Random Forest dalam penelitian ini.
+Penelitian tersebut menggunakan SMOTE-Tomek Link untuk menangani
+ketidakseimbangan data sebelum diterapkan pada metode Random Forest dan
+berhasil meningkatkan performa klasifikasi pada data tidak seimbang. Hal ini
+sejalan dengan penelitian ini yang mengintegrasikan SMOTE sebelum penerapan
+Random Forest pada data rekam medis pasien MDR-TB.
+
+
+
+
+                                      30
+C. Kerangka Berpikir
+
+       Kerangka berpikir menggambarkan alur logis penelitian yang dimulai dari
+permasalahan yang dihadapi hingga hasil yang diharapkan. Adapun kerangka
+berpikir penelitian ini diilustrasikan sebagaimana pada Gambar 3.
+
+
+
+
+                                       31
+Gambar 3. Kerangka Berpikir
+
+
+
+
+            32
+                                    BAB III
+                         METODE PENELITIAN
+
+A. Tempat dan Waktu Penelitian
+
+       Lokasi penelitian ini dilaksanakan di Rumah Sakit Umum Daerah (RSUD)
+Labuang Baji yang beralamat di Jalan Dr. Ratulangi No. 81, Kelurahan Labuang
+Baji, Kecamatan Mamajang, Kota Makassar, Sulawesi Selatan. Rumah sakit ini
+merupakan salah satu fasilitas pelayanan kesehatan milik pemerintah daerah yang
+menjadi rumah sakit rujukan bagi masyarakat di Kota Makassar dan wilayah
+sekitarnya. Lokasinya berada di kawasan yang strategis sehingga mudah
+dijangkau melalui jalur transportasi utama.
+       Berdasarkan kondisi geografisnya, pada bagian utara rumah sakit
+berbatasan langsung dengan Jalan Dr. Ratulangi yang merupakan salah satu jalan
+utama di Kota Makassar, sehingga akses menuju rumah sakit sangat mudah
+dilalui. Di sekitar sisi utara juga terdapat kawasan permukiman serta beberapa
+bangunan usaha masyarakat. Pada bagian timur, kawasan rumah sakit berbatasan
+dengan kawasan permukiman warga serta beberapa fasilitas pelayanan kesehatan
+yang masih berada di sekitar lingkungan RSUD Labuang Baji. Sementara itu,
+pada bagian selatan dan barat, rumah sakit berbatasan dengan kawasan
+permukiman masyarakat serta jalan lingkungan yang menjadi akses keluar masuk
+menuju rumah sakit. Keberadaan jaringan jalan di sekeliling rumah sakit
+memberikan kemudahan bagi pasien, tenaga kesehatan, maupun pengunjung
+dalam mengakses lokasi pelayanan.
+       Secara umum, RSUD Labuang Baji berada di lingkungan yang didukung
+oleh berbagai fasilitas umum, seperti jaringan jalan utama, kawasan permukiman,
+tempat ibadah, dan fasilitas pelayanan kesehatan lainnya. Kondisi tersebut
+menjadikan rumah sakit ini memiliki aksesibilitas yang baik serta mendukung
+pelaksanaan penelitian, khususnya dalam pengambilan data rekam medis pasien
+MDR-TB yang digunakan sebagai sumber data pada penelitian ini.
+
+
+
+
+                                        33
+                      Gambar 4. Lokasi RSUD Labuang Baji
+
+       Penelitian ini dilaksanakan pada bulan Juli hingga Agustus 2026.
+Pengambilan data dilakukan melalui mekanisme resmi yang disetujui oleh pihak
+instansi. Identitas pasien dijaga kerahasiaannya sesuai dengan ketentuan etika
+penelitian dan regulasi perlindungan data kesehatan. Data yang digunakan hanya
+mencakup variabel yang relevan dengan keperluan klasifikasi keberhasilan
+pengobatan, tanpa menyertakan informasi pribadi pasien yang bersifat sensitif.
+       Secara keseluruhan, penelitian ini dilaksanakan pada bulan Juli hingga
+Agustus 2026 dengan tahapan studi literatur, pengumpulan data, pengolahan data,
+implementasi model, pengujian, hingga penyusunan laporan. Rincian kegiatan dan
+alokasi waktu penelitian ditunjukkan pada Tabel 3.
+
+                            Tabel 3. Jadwal Penelitian
+
+No                           Kegiatan                         Juli         Agu
+1    Penyusunan proposal                                       ✓
+ 2   Penyusunan instrumen penelitian                           ✓
+ 3   Penyebaran kuesioner                                      ✓            ✓
+ 4   Pengumpulan data                                                       ✓
+ 5   Preprocessing data                                                     ✓
+ 6   Pelatihan model Random Forest                                          ✓
+ 7   Evaluasi model                                                         ✓
+ 8   Penyusunan laporan                                                     ✓
+
+
+
+
+                                        34
+B. Alat dan Bahan
+
+       Alat dan bahan yang digunakan dalam penelitian ini meliputi kebutuhan
+perangkat keras (hardware) dan perangkat lunak (software) sebagai berikut:
+1.Kebutuhan Hardware (Perangkat Keras)
+ a.Notebook
+ b.Prosesor minimal Intel Core i3
+ c.RAM minimal 8 GB
+2.Kebutuhan Software (Perangkat Lunak)
+ a. Python
+ b. Pustaka Pandas dan NumPy
+ c. Pustaka scikit-learn
+ d. Pustaka imbalanced-learn (SMOTE)
+ e. Pustaka Matplotlib dan Seaborn
+ f. Microsoft Excel
+ g. Visual Studio Code
+ h. Framework Laravel dan PHP
+ i. MySQL
+       Spesifikasi hardware tersebut dipilih karena mampu menjalankan proses
+pelatihan model Random Forest dan penerapan SMOTE tanpa kendala yang
+berarti. Proses komputasi yang dilakukan bersifat moderat dan tidak memerlukan
+GPU khusus, sehingga notebook standar sudah mencukupi untuk kebutuhan
+penelitian ini. Dengan demikian, seluruh tahapan penelitian dapat dilaksanakan
+secara mandiri oleh peneliti. Sementara itu, aplikasi web pengelolaan data
+dikembangkan menggunakan framework Laravel dengan bahasa PHP dan basis
+data MySQL, sehingga pengelolaan data rekam medis serta penyajian hasil
+prediksi model dapat dilakukan secara terintegrasi dan mudah digunakan oleh
+tenaga medis.
+       Pemilihan perangkat lunak tersebut disesuaikan dengan kebutuhan
+penelitian. Python menjadi bahasa utama karena dukungannya terhadap berbagai
+pustaka machine learning. Pustaka imbalanced-learn dipilih karena menyediakan
+implementasi SMOTE yang siap pakai, sedangkan scikit-learn menyediakan
+
+
+
+
+                                       35
+implementasi Random Forest serta berbagai metrik evaluasi yang dibutuhkan
+(Nurhaliza et al., 2025; Kurniawan et al., 2024).
+
+C. Perancangan Sistem
+
+       Perancangan sistem adalah proses perencanaan langkah-langkah penelitian
+yang bertujuan membangun model klasifikasi keberhasilan pengobatan pasien
+MDR-TB berbasis machine learning menggunakan teknik SMOTE dan algoritma
+Random Forest. Tujuan perancangan ini adalah memastikan seluruh tahapan
+penelitian berjalan terstruktur dan sistematis mulai dari pengolahan data hingga
+evaluasi model. Diharapkan hasil perancangan ini mampu menghasilkan model
+klasifikasi yang akurat serta layak digunakan sebagai alat bantu dalam
+mendukung pengambilan keputusan klinis berbasis data.
+       Perancangan sistem dilakukan secara bertahap dan terdokumentasi. Setiap
+tahapan dirancang berdasarkan landasan teori yang telah diuraikan pada Bab II,
+sehingga kesesuaian antara teori, metode, dan implementasi dapat dijaga secara
+konsisten sepanjang penelitian berlangsung.
+
+1. Desain Metode Penelitian
+
+       Desain metode penelitian menggambarkan alur keseluruhan proses
+penelitian, mulai dari pengumpulan data hingga diperolehnya hasil akhir. Alur
+penelitian ini ditunjukkan pada Gambar 5.
+
+
+
+
+                                        36
+                     Gambar 5. Desain Metode Penelitian
+
+a. Mulai
+
+       Tahap awal dimulai dengan menentukan tujuan dan permasalahan
+penelitian, yaitu membangun model klasifikasi keberhasilan pengobatan pasien
+MDR-TB menggunakan teknik SMOTE dan algoritma Random Forest.
+       Pada tahap ini juga dilakukan studi literatur terhadap penelitian
+sebelumnya serta pemahaman terhadap karakteristik data yang akan digunakan,
+sehingga arah penelitian menjadi jelas dan terukur.
+
+
+
+
+                                        37
+b. Pengumpulan Data
+
+        Pengambilan data rekam medis pasien MDR-TB dari RSUD Labuang Baji,
+Sulawesi Selatan. Data yang dikumpulkan mencakup variabel usia, kategori usia,
+jenis kelamin, status bekerja, riwayat pengobatan sebelumnya, efek samping obat,
+panduan pengobatan, tinggi badan, indeks massa tubuh (IMT), status gizi,
+kepatuhan minum obat, status merokok, riwayat diabetes, riwayat HIV,
+pemeriksaan kontak, dan komorbiditas lain sebagai landasan analisis.
+        Pengumpulan data dilakukan dengan mengajukan permohonan izin resmi
+kepada pihak instansi, dan seluruh prosesnya tetap menjaga kerahasiaan identitas
+pasien sesuai dengan ketentuan etika penelitian.
+
+c. Preprocessing Data
+
+        Memastikan kualitas data melalui prosedur pembersihan (cleaning),
+normalisasi, dan penanganan nilai yang hilang (missing values) serta encoding
+data kategorikal agar siap diproses oleh model.
+        Preprocessing merupakan tahapan yang sangat menentukan kualitas model
+akhir. Data yang bersih dan konsisten akan menghasilkan model yang lebih akurat
+dan stabil ketika diterapkan pada data baru.
+
+d. Pembagian Data
+
+        Dataset dibagi menjadi data latih (training) dan data uji (testing).
+Pembagian dilakukan sebelum penerapan SMOTE agar tidak terjadi kebocoran
+data (data leakage).
+        Pembagian data menggunakan proporsi 80:20, di mana 80% data
+digunakan untuk melatih model dan 20% data digunakan untuk menguji performa
+model pada data yang belum pernah dilihat.
+
+e. Penerapan SMOTE
+
+        Teknik SMOTE diterapkan pada data latih untuk menyeimbangkan jumlah
+sampel kelas minoritas sehingga model tidak mengalami bias saat melakukan
+klasifikasi.
+
+
+
+
+                                        38
+        SMOTE menghasilkan sampel sintetis baru melalui interpolasi k-nearest
+neighbors. Dengan data latih yang seimbang, model dapat mempelajari pola kelas
+minoritas secara lebih optimal.
+
+f. Pelatihan Model
+
+        Algoritma Random Forest dilatih menggunakan data latih yang telah
+diseimbangkan untuk membangun kemampuan prediksi terhadap keberhasilan
+pengobatan pasien.
+        Proses pelatihan dilakukan dengan menentukan terlebih dahulu parameter
+Random Forest, seperti jumlah pohon (n_estimators) dan kedalaman maksimum
+(max_depth), melalui proses tuning hyperparameter.
+
+g. Validasi Model
+
+        Model Random Forest yang telah terbentuk diuji menggunakan data uji
+guna mengukur kemampuannya dalam mengklasifikasikan data baru.
+        Validasi juga dapat dilakukan menggunakan teknik k-fold cross-validation
+untuk memperoleh estimasi performa yang lebih stabil dan mengurangi risiko
+overfitting.
+
+h. Evaluasi Model
+
+        Evaluasi dilakukan melalui confusion matrix untuk mendapatkan nilai
+akurasi, presisi, recall, serta F1-score.
+        Perhatian utama evaluasi diberikan pada recall kelas minoritas, karena
+kemampuan mendeteksi pasien berisiko gagal pengobatan merupakan tujuan
+utama penelitian ini.
+
+i. Implementasi dan Simulasi
+
+        Model yang telah divalidasi digunakan sebagai sistem pendukung
+keputusan klinis untuk mengklasifikasikan keberhasilan pengobatan pada data
+baru.
+        Simulasi dilakukan dengan memasukkan data pasien baru ke dalam model
+untuk mengamati kemampuan model dalam memberikan prediksi yang cepat,
+akurat, dan konsisten.
+
+
+
+
+                                            39
+j. Selesai
+
+       Seluruh tahapan penelitian telah dilaksanakan dan penelitian dinyatakan
+selesai, Hasil akhir seluruh tahapan dirangkum dalam bentuk laporan penelitian
+yang mencakup kesimpulan, keterbatasan, serta saran untuk pengembangan
+penelitian selanjutnya.
+
+2. Perancangan Unified Modeling Language (UML)
+
+       Perancangan sistem menggunakan Unified Modeling Language (UML)
+untuk menggambarkan interaksi aktor dengan sistem serta alur proses klasifikasi
+keberhasilan pengobatan MDR-TB. Diagram UML yang dirancang meliputi use
+case diagram, activity diagram, dan class diagram. Aktor pada sistem ini adalah
+admin yang mengelola akun tenaga medis serta tenaga medis yang menginput
+data pasien dan melihat hasil klasifikasi.
+
+
+
+
+     Gambar 6. Use Case Diagram Klasifikasi Keberhasilan Pengobatan
+
+
+
+
+                                         40
+     Gambar 7. Activity Diagram Klasifikasi Keberhasilan Pengobatan
+
+
+
+
+      Gambar 8. Class Diagram Klasifikasi Keberhasilan Pengobatan
+
+3. Metode Algoritma yang Digunakan
+
+      Metode yang digunakan dalam penelitian ini adalah kombinasi teknik
+SMOTE untuk penanganan ketidakseimbangan data dan algoritma Random Forest
+sebagai model klasifikasi. SMOTE diterapkan pada data latih setelah proses
+preprocessing dan pembagian data untuk menyeimbangkan jumlah sampel kelas
+minoritas. Proses ini menghasilkan dataset yang lebih representatif sehingga
+
+
+
+
+                                    41
+model dapat mempelajari pola kelas minoritas secara lebih baik. Random Forest
+membangun sejumlah pohon keputusan menggunakan teknik bagging dan
+pemilihan fitur secara acak. Parameter yang digunakan dalam penelitian ini
+meliputi n_estimators (jumlah pohon keputusan), max_depth (kedalaman
+maksimum pohon), dan random_state untuk memastikan hasil dapat direproduksi.
+Model dilatih menggunakan data latih yang telah diseimbangkan SMOTE,
+kemudian diuji menggunakan data uji untuk menilai kemampuannya dalam
+melakukan generalisasi terhadap data baru.
+       Performa model dievaluasi menggunakan confusion matrix dengan metrik
+accuracy, precision, recall, dan F1-score. Perhatian utama diberikan pada recall
+kelas minoritas karena kegagalan mendeteksi pasien yang berisiko gagal
+pengobatan memiliki dampak yang sangat besar. Dengan performa yang baik,
+model diharapkan dapat menjadi alat bantu pendukung keputusan bagi tenaga
+medis. Alur kerja metode secara rinci ditunjukkan pada Gambar 9.
+
+
+
+
+         Gambar 9. Flowchart Metode SMOTE dan Random Forest
+
+
+
+
+                                       42
+a. Mulai
+
+       Tahapan ini merupakan awal dari proses pelatihan model klasifikasi
+menggunakan teknik SMOTE dan algoritma Random Forest.
+       Proses dimulai dengan memahami tujuan penelitian dan mengidentifikasi
+data yang dibutuhkan untuk membangun model klasifikasi.
+
+b. Input Data Rekam Medis
+
+       Data rekam medis pasien MDR-TB dimasukkan ke dalam sistem sebagai
+bahan utama analisis.
+       Data yang dimasukkan mencakup variabel usia, kategori usia, jenis
+kelamin, status bekerja, riwayat pengobatan sebelumnya, efek samping obat,
+panduan pengobatan, tinggi badan, indeks massa tubuh (IMT), status gizi,
+kepatuhan minum obat, status merokok, riwayat diabetes, riwayat HIV,
+pemeriksaan kontak, dan komorbiditas lain sebagai fitur pada model.
+
+c. Preprocessing Data
+
+       Data dibersihkan, nilai yang hilang ditangani, dan data kategorikal di-
+encoding agar siap diproses oleh model.
+       Langkah ini memastikan data bebas dari nilai yang tidak valid sehingga
+proses pelatihan model dapat berjalan dengan baik.
+
+d. Penerapan SMOTE
+
+       Teknik SMOTE diterapkan pada data latih untuk menyeimbangkan jumlah
+sampel kelas minoritas.
+       Penerapan SMOTE menghasilkan data latih yang seimbang sehingga
+model dapat mengenali pola kelas minoritas secara lebih baik.
+
+e. Pembagian Data Latih dan Uji
+
+       Dataset dibagi menjadi data latih dan data uji untuk proses pelatihan dan
+pengujian model.
+       Pembagian dilakukan secara proporsional dan acak agar data uji benar-
+benar merepresentasikan data yang belum pernah dilihat model.
+
+
+
+
+                                       43
+f. Inisialisasi Parameter Random Forest
+
+       Parameter model ditentukan, meliputi n_estimators, max_depth, dan
+random_state.
+       Parameter dioptimalkan melalui proses grid search untuk memperoleh
+performa model terbaik pada data latih yang telah diseimbangkan.
+
+g. Pelatihan Model Random Forest
+
+       Model dilatih menggunakan data latih yang telah diseimbangkan untuk
+mempelajari pola keberhasilan pengobatan pasien.
+       Pada tahap ini model membangun sejumlah pohon keputusan dan
+menggabungkan hasilnya melalui mekanisme voting mayoritas.
+
+h. Pengujian Model
+
+       Model diuji menggunakan data uji untuk menilai kemampuannya
+mengklasifikasikan data baru.
+       Hasil pengujian dibandingkan dengan label sebenarnya untuk memperoleh
+nilai metrik evaluasi.
+
+i. Evaluasi Model
+
+       Performa model diukur menggunakan metrik accuracy, precision, recall,
+dan F1-score.
+       Evaluasi dilakukan melalui confusion matrix dengan fokus utama pada
+recall kelas minoritas untuk menilai sensitivitas model.
+
+j. Selesai
+
+       Model yang telah terlatih dan tervalidasi siap digunakan sebagai sistem
+pendukung keputusan klinis.
+       Hasil akhir didokumentasikan dalam laporan penelitian beserta kesimpulan
+dan saran untuk pengembangan selanjutnya.
+
+4. Teknik Analisis Data
+
+       Teknik analisis data pada penelitian ini mengikuti alur yang telah
+dirancang pada desain metode penelitian. Tahap pertama adalah pengumpulan
+data rekam medis pasien MDR-TB dari RSUD Labuang Baji, Sulawesi Selatan.
+
+
+
+
+                                        44
+Data yang terkumpul kemudian menjalani proses preprocessing untuk
+memastikan kualitas dan kesiapan data sebelum digunakan dalam pelatihan
+model.
+         Tahap preprocessing dilakukan melalui beberapa langkah. Pertama, data
+cleaning untuk menangani nilai yang hilang (missing values) dan data duplikat.
+Kedua, encoding data kategorikal menjadi bentuk numerik menggunakan teknik
+yang sesuai, misalnya label encoding atau one-hot encoding. Ketiga, normalisasi
+data numerik untuk menyamakan skala antar fitur sehingga proses perhitungan
+jarak pada SMOTE dapat berjalan optimal.
+         Setelah preprocessing, dataset dibagi menjadi data latih dan data uji
+dengan proporsi 80:20. Pembagian data dilakukan sebelum penerapan SMOTE
+untuk mencegah kebocoran data. Teknik SMOTE kemudian diterapkan hanya
+pada data latih untuk menyeimbangkan jumlah sampel kelas minoritas, sehingga
+model memperoleh representasi data yang lebih merata selama proses pelatihan.
+         Model Random Forest dibangun menggunakan data latih yang telah
+diseimbangkan. Konfigurasi hyperparameter ditentukan melalui proses grid
+search untuk memperoleh kombinasi parameter yang menghasilkan performa
+terbaik. Parameter yang dioptimalkan meliputi n_estimators, max_depth,
+min_samples_split, dan random_state. Model yang terbentuk kemudian diuji
+menggunakan data uji yang belum pernah dilihat selama pelatihan.
+         Performa model dievaluasi menggunakan confusion matrix dengan metrik
+accuracy, precision, recall, dan F1-score. Hasil evaluasi dianalisis untuk menilai
+sejauh mana penerapan SMOTE meningkatkan kemampuan model dalam
+mendeteksi pasien yang berisiko gagal pengobatan, khususnya pada kelas
+minoritas. Seluruh proses analisis diharapkan menghasilkan model yang akurat,
+stabil, dan dapat diandalkan sebagai sistem pendukung keputusan klinis.
+
+5. Skenario Pengujian
+
+         Untuk menilai efektivitas penerapan SMOTE, dilakukan dua skenario
+pengujian. Skenario pertama melatih model Random Forest menggunakan dataset
+asli yang tidak seimbang, sedangkan skenario kedua melatih model menggunakan
+dataset yang telah diseimbangkan dengan SMOTE. Hasil kedua skenario
+dibandingkan menggunakan metrik accuracy, precision, recall, dan F1-score.
+
+
+
+                                       45
+       Perbandingan ini bertujuan untuk menunjukkan sejauh mana SMOTE
+berkontribusi terhadap peningkatan kemampuan model dalam mendeteksi kelas
+minoritas. Dengan melihat selisih recall antara kedua skenario, efektivitas
+SMOTE dapat diukur secara kuantitatif dan disimpulkan secara objektif.
+       Selain itu, dilakukan eksperimen terhadap variasi proporsi pembagian data
+(misalnya 80:20 dan 70:30) untuk melihat stabilitas performa model pada
+berbagai kondisi. Variasi jumlah pohon (n_estimators) juga diuji untuk
+menemukan konfigurasi yang menghasilkan performa terbaik sekaligus
+menghindari overfitting.
+       Seluruh hasil pengujian didokumentasikan secara sistematis untuk
+memudahkan analisis. Hasil evaluasi disajikan dalam bentuk tabel dan grafik
+sehingga mudah dipahami oleh pembaca, termasuk tenaga medis yang tidak
+memiliki latar belakang teknis yang mendalam. Dokumentasi ini juga menjadi
+bahan untuk menarik kesimpulan dan memberikan saran pada penelitian
+selanjutnya.
+
+
+
+
+                                      46
+                                     BAB IV
+                          HASIL DAN PEMBAHASAN
+       Bab ini menyajikan hasil penelitian yang meliputi pengolahan data rekam
+medis, implementasi sistem klasifikasi, pelatihan dan evaluasi model Random
+Forest dengan SMOTE, serta pengujian sistem dan model. Pembahasan dilakukan
+dengan menghubungkan hasil yang diperoleh dengan landasan teori pada Bab II
+dan penelitian terkait.
+
+A. Hasil Penerapan User Centered Design
+
+       Pengembangan sistem mengikuti prinsip User Centered Design (UCD)
+yang menempatkan pengguna sebagai pusat setiap keputusan desain. Penerapan
+UCD dalam penelitian ini dilaksanakan melalui tahapan yang saling
+berkesinambungan, yaitu identifikasi konteks pengguna, identifikasi kebutuhan
+pengguna, implementasi sistem awal, evaluasi pengguna, dan implementasi
+perbaikan berdasarkan hasil evaluasi.
+
+1. Hasil Identifikasi Konteks Pengguna
+
+       Tahap identifikasi konteks bertujuan memahami kondisi nyata pelayanan
+pasien MDR-TB di RSUD Labuang Baji sebelum sistem dikembangkan.
+Berdasarkan uraian latar belakang pada Bab I, analisis data rekam medis selama
+ini diolah secara manual dan bersifat deskriptif sehingga pola risiko yang
+kompleks tidak dikenali, serta belum tersedia sistem yang membantu tenaga
+medis mendeteksi dini potensi kegagalan pengobatan. Data yang dikelola berupa
+175 baris rekam medis pasien MDR-TB dengan 17 variabel klinis dan demografis.
+       Calon pengguna sistem terdiri atas dua peran. Admin yang mengelola akun
+pengguna dan data rekam medis, melakukan pembersihan data, melatih ulang
+model, serta menjalankan skenario pengujian. Tenaga medis yang menginput data
+pasien, memperoleh hasil klasifikasi beserta rekomendasi, melihat riwayat
+klasifikasinya sendiri, dan melihat hasil evaluasi model.
+
+2. Hasil Identifikasi Kebutuhan Pengguna
+
+       Berdasarkan konteks tersebut, kebutuhan pengguna yang harus dipenuhi
+sistem meliputi: (a) penginputan 17 variabel rekam medis dengan perhitungan
+
+
+
+                                        47
+otomatis IMT dan kategori usia; (b) klasifikasi keberhasilan pengobatan beserta
+rekomendasi tindakan klinis berprioritas; (c) riwayat hasil klasifikasi; (d) evaluasi
+model yang transparan (confusion matrix, metrik, dan feature importance); (e)
+pengujian efektivitas SMOTE dan skenario pengujian bagi admin; (f) pengelolaan
+data rekam medis, pembersihan data, dan pelatihan ulang model; serta (g)
+pengelolaan akun dengan pembagian hak akses. Setiap kebutuhan tersebut
+dipetakan ke modul implementasi pada bagian B sehingga tidak ada kebutuhan
+yang tidak tertangani.
+
+3. Hasil Implementasi Sistem Awal
+
+        Berdasarkan kebutuhan tersebut, sistem awal dikembangkan langsung
+dalam bentuk aplikasi berbasis web yang memuat fungsi login, dasbor sesuai
+peran, klasifikasi pasien, riwayat klasifikasi, evaluasi model, pengelolaan data
+rekam medis, pembersihan data, pengujian SMOTE, skenario pengujian, dan
+manajemen akun. Struktur data dan formulir disesuaikan dengan variabel
+penelitian pada Bab III sehingga alur penggunaan mengikuti proses klasifikasi
+yang dirancang.
+
+4. Hasil Evaluasi Pengguna
+
+        Evaluasi pengguna dilaksanakan terhadap kesesuaian fitur dengan
+kebutuhan, kemudahan penginputan data, kejelasan rekomendasi tindakan klinis,
+dan ketepatan pembagian hak akses. Temuan dan masukan yang diperoleh dicatat
+pada daftar berikut untuk ditindaklanjuti pada tahap perbaikan. [Daftar ini
+merupakan templat dan diisi setelah evaluasi lapangan dilaksanakan: (1)
+Aspek: ...; Temuan/masukan: ...; Status: ...; (2) Aspek: ...; Temuan/masukan: ...;
+Status: ...]
+
+5. Hasil Implementasi Perbaikan Pengguna
+
+        Setiap temuan pada tahap evaluasi dipetakan ke kondisi sebelum dan
+sesudah perbaikan agar sistem versi akhir benar-benar mencerminkan kebutuhan
+pengguna. [Templat dan diisi setelah evaluasi lapangan dilaksanakan: (1)
+Masukan: ...; Sebelum perbaikan: ...; Setelah perbaikan: ...; (2) Masukan: ...;
+Sebelum perbaikan: ...; Setelah perbaikan: ...]
+
+
+
+                                         48
+B. Hasil Implementasi Sistem Akhir
+
+Pembagian Hak Akses Admin dan Petugas
+
+       Sistem memiliki dua peran pengguna. Admin mengelola akun pengguna
+dan data rekam medis, melakukan pembersihan data, melatih ulang model, serta
+menjalankan skenario pengujian. Tenaga medis menginput data pasien,
+memperoleh hasil klasifikasi, melihat riwayat klasifikasinya sendiri, dan melihat
+hasil evaluasi model. Seluruh akun dibuat oleh admin dan tidak tersedia
+pendaftaran mandiri, sesuai ketentuan pelindungan data kesehatan pada Undang-
+Undang Nomor 27 Tahun 2022.
+       Halaman login merupakan pintu masuk sistem. Pengguna memasukkan
+alamat surel dan kata sandi yang telah didaftarkan oleh admin, dengan opsi ingat
+saya serta tautan lupa kata sandi (Gambar 10).
+
+
+
+
+                      Gambar 10. Halaman Login Sistem
+
+       Dasbor admin menampilkan tujuh kartu menu sesuai kewenangannya,
+yaitu Klasifikasi Pasien, Riwayat Klasifikasi, Evaluasi Model, Pengujian SMOTE,
+Skenario Pengujian, Data Rekam Medis, dan Manajemen Akun (Gambar 11).
+Dasbor tenaga medis hanya menampilkan menu yang sesuai perannya; menu
+Administrasi tidak ditampilkan (Gambar 12).
+
+
+
+                                       49
+                       Gambar 11. Dashboard Admin
+
+
+
+
+                    Gambar 12. Dashboard Tenaga Medis
+
+       Formulir klasifikasi memuat 15 variabel isian yang dikelompokkan
+menjadi identitas pasien, data demografis, kondisi fisik, riwayat kesehatan, dan
+data pengobatan, ditambah dua variabel otomatis (kategori Usia dan IMT).
+
+
+
+                                      50
+Penghitung di bagian bawah tombol menunjukkan jumlah variabel yang telah
+terisi dari 15 variabel wajib (Gambar 13).
+
+
+
+
+                       Gambar 13. Formulir Klasifikasi
+
+       Halaman hasil menampilkan label klasifikasi beserta tingkat keyakinan,
+diagram probabilitas tiap kelas, tingkat risiko dan faktor risikonya, daftar
+rekomendasi tindakan klinis berprioritas, data 17 variabel masukan, serta variabel
+paling berpengaruh. Pada contoh pasien uji, model mengklasifikasikan Tidak
+Berhasil dengan keyakinan 95,30% dan risiko Tinggi dengan tujuh faktor risiko
+(Gambar 14). Perhitungan IMT 18,37 pada contoh tersebut membuktikan variabel
+turunan bekerja otomatis.
+
+
+
+
+                                        51
+               Gambar 14. Hasil Klasifikasi dan Rekomendasi
+
+       Halaman riwayat mencatat seluruh hasil klasifikasi yang pernah dilakukan
+beserta pasien, hasil, keyakinan, pelaksana, dan waktu, dilengkapi penyaring
+berdasarkan hasil dan tombol rincian (Gambar 15).
+
+
+
+
+                       Gambar 15. Riwayat Klasifikasi
+
+
+
+                                      52
+       Halaman evaluasi model menyajikan metrik evaluasi, confusion matrix,
+distribusi   kelas,   ringkasan   pembersihan   data,   hasil   cross   validation,
+hyperparameter terpilih, perbandingan data latih dan data uji, feature importance,
+serta laporan klasifikasi (Gambar 16).
+
+
+
+
+                                         53
+                      Gambar 16. Evaluasi Model
+
+      Halaman pengujian SMOTE melatih model dua kali pada data yang sama,
+yaitu tanpa dan dengan SMOTE, lalu menampilkan kesimpulan, perbandingan
+
+
+
+                                   54
+metrik data uji dan cross validation, distribusi data latih, serta confusion matrix
+masing-masing skenario (Gambar 17).
+
+
+
+
+                  Gambar 17. Pengujian Efektivitas SMOTE
+
+
+
+
+                                        55
+       Halaman skenario pengujian menampilkan proporsi dan jumlah pohon
+terbaik berdasarkan F1-score data uji, tabel variasi proporsi pembagian data, dan
+tabel variasi jumlah pohon (Gambar 18).
+
+
+
+
+                       Gambar 18. Skenario Pengujian
+
+       Halaman data rekam medis mengelola 175 baris dataset penelitian beserta
+tombol latih ulang model yang melatih kembali Random Forest dengan SMOTE
+dari data terkini (Gambar 19). Halaman pembersihan data merangkum hasil
+pemeriksaan duplikat dan nilai hilang (Gambar 20). Halaman manajemen akun
+mengelola akun admin dan tenaga medis (Gambar 21).
+
+
+
+
+                                       56
+Gambar 19. Data Rekam Medis
+
+
+
+
+Gambar 20. Pembersihan Data
+
+
+
+
+            57
+                        Gambar 21. Manajemen Akun
+
+Hasil Pengolahan Data
+
+       Data penelitian berupa 175 baris rekam medis pasien MDR-TB RSUD
+Labuang Baji dengan 17 variabel prediktor dan satu variabel target status
+keberhasilan pengobatan (Berhasil/Tidak Berhasil).
+       Pemeriksaan    kualitas   data   melalui   halaman    Pembersihan    Data
+menunjukkan tidak ditemukan data duplikat (0 baris) dan tidak ditemukan nilai
+hilang (0 baris), sehingga seluruh 175 baris data dapat digunakan untuk
+pemodelan (Gambar 20).
+       Empat variabel numerik (Ket.Usia, BB, TB, IMT) dan 13 variabel
+kategorikal digunakan sebagai fitur. Variabel turunan IMT dihitung dari berat dan
+tinggi badan, sedangkan kategori Usia ditentukan otomatis dari usia pasien
+(kurang dari 45 tahun tergolong usia produktif), sehingga keduanya selalu
+konsisten dengan data yang dimasukkan tenaga medis.
+       Variabel kategorikal dikonversi menjadi numerik melalui label encoding.
+Dataset dibagi 80:20 secara stratified menjadi 140 data latih (97 Berhasil, 43
+Tidak Berhasil) dan 35 data uji (24 Berhasil, 11 Tidak Berhasil). Normalisasi
+StandardScaler     diterapkan    sebelum      SMOTE,        kemudian    SMOTE
+
+
+
+                                        58
+menyeimbangkan data latih menjadi 97 berbanding 97 (194 sampel). Distribusi
+awal 121 Berhasil (69,14%) berbanding 54 Tidak Berhasil (30,86%) dengan rasio
+ketidakseimbangan 2,24:1.
+
+Hasil Pelatihan dan Evaluasi Model
+
+        Pencarian grid menghasilkan kombinasi hyperparameter terbaik pada
+Tabel 4 berdasarkan F1-score cross validation sebesar 80,64%. Model tersebut
+kemudian dievaluasi pada 35 data uji yang belum pernah dilihat selama pelatihan.
+
+                         Tabel 4. Hyperparameter Terpilih
+
+Parameter                                                   Nilai
+Jumlah pohon (n_estimators)                                 100
+Kedalaman maksimum (max_depth)                               5
+Minimum sampel pemisah                                       2
+(min_samples_split)
+Nilai acak (random_state)                                     42
+        Hasil evaluasi pada data uji mencapai kesempurnaan pada keempat metrik
+sebagaimana Tabel 6, dengan confusion matrix pada Tabel 5 yang menunjukkan
+tidak satu pun pasien gagal yang tidak terdeteksi (false negative nol).
+
+                         Tabel 5. Confusion Matrix Data Uji
+
+     Aktual \ Prediksi                  Berhasil               Tidak Berhasil
+         Berhasil                       24 (TN)                    0 (FP)
+      Tidak Berhasil                     0 (FN)                   11 (TP)
+
+                         Tabel 6. Metrik Evaluasi Data Uji
+
+         Metrik                 Nilai                      Rumus
+        Accuracy              100,00%                  (TP + TN) / total
+        Precision             100,00%                   TP / (TP + FP)
+         Recall               100,00%                   TP / (TP + FN)
+        F1-score              100,00%                    2PR / (P + R)
+        Validasi silang lima lipatan pada data latih pada Tabel 7 memberikan
+estimasi performa yang lebih stabil dengan rata-rata F1-score 80,64% dan
+simpangan baku 0,1277. Rata-rata recall 74,72% dengan simpangan baku 0,1533
+menunjukkan variasi antar lipatan yang cukup besar sebagai konsekuensi ukuran
+dataset yang kecil (175 baris). Selisih metrik data latih dan data uji yang kecil
+(akurasi 99,29% berbanding 100,00%) menandakan model tidak mengalami
+overfitting.
+
+
+
+
+                                           59
+                       Tabel 7. Hasil Cross Validation Lima Lipatan
+
+            Metrik                       Rata-rata                 Simpangan Baku
+           Accuracy                       89,29%                       ±0,0678
+           Precision                      88,45%                       ±0,1080
+            Recall                        74,72%                       ±0,1533
+           F1-score                       80,64%                       ±0,1277
+        Tiga variabel paling berpengaruh adalah Kepatuhan Minum Obat
+(33,19%), Riwayat Pengobatan Sebelumnya (18,65%), dan Panduan Pengobatan
+(8,21%), sedangkan Riwayat HIV (0,22%) paling kecil pengaruhnya. Urutan ini
+selaras dengan faktor risiko prioritas pada rekomendasi klinis sistem.
+
+C. Hasil Pengujian Black Box
+
+        Pengujian efektivitas SMOTE membandingkan model yang dilatih pada
+dataset asli dan dataset seimbang. Pada data uji, SMOTE menaikkan recall kelas
+minoritas dari 90,91% menjadi 100,00% atau selisih 9,09 poin, dengan pasien
+gagal yang tidak terdeteksi berkurang dari satu menjadi nol (Tabel 8). Pada cross
+validation arah selisihnya berlawanan karena dataset kecil, sebagaimana
+dijelaskan sendiri oleh halaman pengujian; acuan kesimpulan tetap metrik data
+uji.
+
+            Tabel 8. Perbandingan Model Tanpa dan Dengan SMOTE
+
+         Metrik                  Tanpa SMOTE        Dengan SMOTE          Selisih
+       Accuracy                      97,14%            100,00%            +2,86%
+        Precision                   100,00%            100,00%            +0,00%
+          Recall                     90,91%            100,00%            +9,09%
+        F1-score                     95,24%            100,00%            +4,76%
+  Gagal tidak terdeteksi                1                 0                 -1
+        Skenario variasi proporsi menunjukkan pembagian 80:20 sebagai yang
+terbaik dengan F1-score data uji 100,00% berbanding 93,33% pada 70:30 (Tabel
+9). Skenario variasi jumlah pohon menunjukkan 100 pohon sebagai yang terbaik
+dengan selisih F1-score latih dan uji nol, sedangkan 50, 200, 300, dan 500 pohon
+menghasilkan F1-score 95,24% (Tabel 10).
+
+                         Tabel 9. Skenario Variasi Proporsi Data
+
+Proporsi     Latih         Uji      Akurasi          Presisi    Recall          F1
+ 80:20        194          35       100,00%         100,00%    100,00%       100,00%
+ 70:30        168          53       96,23%          100,00%     87,50%        93,33%
+
+
+
+
+                                               60
+                       Tabel 10. Skenario Variasi Jumlah Pohon
+
+n_estimato         Akurasi        Presisi            Recall           F1          Selisih
+    rs
+    50              97,14%       100,00%              90,91%        95,24%        +4,76%
+   100             100,00%       100,00%             100,00%       100,00%        +0,00%
+   200              97,14%       100,00%              90,91%        95,24%        +4,76%
+   300              97,14%       100,00%              90,91%        95,24%        +4,76%
+   500              97,14%       100,00%              90,91%        95,24%        +4,76%
+       Pengujian black box pada Tabel 11 memeriksa kesesuaian fungsi aplikasi
+dengan keluaran yang diharapkan. Seluruh skenario berstatus berhasil.
+
+                         Tabel 11. Hasil Pengujian Black Box
+
+No   Modul             Skenario Pengujian       Keluaran yang Diharapkan           Status
+ 1   Login             Masuk dengan surel       Dasbor sesuai peran ditampilkan      ✓
+                       dan kata sandi valid
+2    Login             Masuk dengan             Pesan kesalahan, tetap di            ✓
+                       kredensial tidak valid   halaman login
+3    Login             Masuk dengan kolom       Validasi kolom wajib diisi           ✓
+                       kosong
+4    Klasifikasi       Isi 15 variabel lalu     Hasil, probabilitas, dan             ✓
+                       lakukan klasifikasi      rekomendasi tampil
+5    Klasifikasi       Formulir belum           Penghitung kelengkapan               ✓
+                       lengkap                  diperbarui
+6    Riwayat           Buka riwayat dan         Daftar sesuai saringan               ✓
+                       saring berdasarkan       ditampilkan
+                       hasil
+7    Evaluasi          Buka halaman             Metrik, confusion matrix, dan        ✓
+     Model             evaluasi                 feature importance tampil
+8    Pengujian         Jalankan pengujian       Kesimpulan dan tabel                 ✓
+     SMOTE             efektivitas SMOTE        perbandingan tampil
+9    Skenario          Jalankan skenario        Konfigurasi terbaik dan tabel        ✓
+     Pengujian         proporsi dan jumlah      tampil
+                       pohon
+10   Data Rekam        Tambah dan ubah          Perubahan tersimpan dan              ✓
+     Medis             baris data (admin)       ditampilkan
+11   Data Rekam        Tekan latih ulang        Model baru tersimpan dan dapat       ✓
+     Medis             model (admin)            dipakai
+12   Pembersihan       Buka halaman             Ringkasan duplikat dan nilai         ✓
+     Data              pembersihan (admin)      hilang tampil
+13   Manajemen         Tambah akun tenaga       Akun tersimpan dalam daftar          ✓
+     Akun              medis (admin)
+14   Hak Akses         Tenaga medis             Menu tidak ditampilkan               ✓
+                       membuka menu
+                       admin
+15   Logout            Pengguna keluar dari     Sesi berakhir, halaman login         ✓
+                       sistem                   ditampilkan
+
+D. Hasil Validasi System Usability Scale
+
+
+
+
+                                                61
+         Evaluasi penerimaan pengguna menggunakan System Usability Scale
+(SUS) sepuluh pernyataan dan Technology Acceptance Model (TAM) enam belas
+butir. Instrumen disiapkan pada bagian ini; pengisian dan perhitungan dilakukan
+setelah survei terhadap tenaga medis dan admin, sehingga tabel rekapitulasi di
+bawah ini masih kosong.
+         Skor SUS tiap responden dihitung dengan aturan: butir positif dikurangi
+satu, lima dikurangi butir negatif, seluruhnya dijumlahkan lalu dikali 2,5 sehingga
+rentang skor 0 sampai 100.
+
+                           Tabel 12. Pernyataan Kuesioner SUS
+
+No      Tipe    Pernyataan
+ 1       +      Saya merasa ingin menggunakan sistem klasifikasi MDR-TB ini secara rutin.
+ 2       −      Saya merasa sistem ini terlalu rumit dan tidak perlu kerumitan tersebut.
+ 3       +      Saya merasa sistem ini mudah digunakan untuk mengklasifikasikan pasien
+                MDR-TB.
+4        −      Saya membutuhkan bantuan tenaga ahli atau teknis untuk dapat menggunakan
+                sistem ini.
+5        +      Saya merasa berbagai fitur dalam sistem ini terintegrasi dengan baik.
+6        −      Saya merasa ada banyak ketidakkonsistenan tampilan dan fitur dalam sistem
+                ini.
+7        +      Saya merasa kebanyakan tenaga medis akan dapat menggunakan sistem ini
+                dengan cepat.
+8        −      Saya merasa sistem ini sangat tidak praktis dan menyulitkan penginputan data.
+9        +      Saya merasa sangat percaya diri menggunakan sistem ini untuk mendukung
+                keputusan klinis.
+10       −      Saya perlu banyak belajar sebelum bisa menggunakan sistem ini dengan lancar.
+
+             Tabel 13. Rekapitulasi Jawaban SUS (Diisi Setelah Survei)
+
+Resp.    P1     P2    P3     P4    P5     P6    P7     P8    P9    P10    Tota    Skor SUS
+                                                                           l
+R-01
+R-02
+R-03
+R-04
+R-05
+R-06
+R-07
+R-08
+R-09
+R-10
+R-11
+
+
+
+
+                                               62
+Instrumen Evaluasi TAM
+
+         Penilaian TAM memakai skala Likert 1 sampai 5 pada empat konstruk:
+kemudahan penggunaan (PEOU: mudah dipelajari, mudah dioperasikan, interaksi
+jelas, mudah terampil), kebermanfaatan (PU: mempercepat identifikasi risiko,
+meningkatkan ketepatan deteksi, membantu tindak lanjut, berguna di praktik
+klinis), sikap (ATU: berpandangan positif, bijak menggunakan, mendukung
+penerapan, percaya pada hasil), dan niat perilaku (BI: berniat rutin memakai,
+merekomendasikan, memprioritaskan, berniat lanjut). Rata-rata tiap konstruk dan
+keseluruhan dihitung dari seluruh jawaban; kategori sangat tinggi pada rentang di
+atas 4,20.
+
+          Tabel 14. Rekapitulasi Penilaian TAM (Diisi Setelah Survei)
+
+Respon       PEOU            PU              ATU          BI          Rata-rata
+ den
+ R-01
+ R-02
+ R-03
+ R-04
+ R-05
+ R-06
+ R-07
+ R-08
+ R-09
+ R-10
+ R-11
+
+F. Pembahasan
+
+         Hasil evaluasi menunjukkan model mencapai metrik sempurna pada 35
+data uji dengan nol false negative. Angka ini perlu dibaca bersama hasil cross
+validation yang rata-rata recall-nya 74,72% dengan simpangan baku 0,1533;
+variasi antar lipatan tersebut wajar mengingat dataset hanya 175 baris sehingga
+tiap lipatan validasi hanya berisi sekitar tujuh sampel minoritas. Selisih kecil
+antara performa latih dan uji menandakan tidak ada overfitting yang berarti.
+         Kontribusi SMOTE terbukti pada metrik data uji dengan kenaikan recall
+9,09 poin dan hilangnya satu kasus gagal yang tidak terdeteksi, sejalan dengan
+temuan Hairani dkk. (2023) serta Kurniawan dan Salam (2024) bahwa
+
+
+
+                                        63
+penyeimbangan data meningkatkan sensitivitas model. Urutan feature importance
+yang menempatkan kepatuhan minum obat (33,19%) di puncak juga bermakna
+klinis dan konsisten dengan faktor risiko prioritas pada rekomendasi sistem.
+       Dibandingkan penelitian terkait, pendekatan ini melengkapi Triloka dan
+Sugianto (2025) yang menekankan pentingnya penanganan ketidakseimbangan,
+serta Nurhaliza dkk. (2025) yang melaporkan peningkatan recall melalui
+ADASYN-Tomek          Links.    Berbeda   dengan   Azzahra   dkk.   (2024)     yang
+menggabungkan tiga algoritma dan Widjaja dkk. (2025) yang membandingkan
+regresi logistik dengan CNN, penelitian ini mempertahankan satu algoritma
+(Random Forest) agar interpretabilitas bagi tenaga medis tetap terjaga,
+sebagaimana ditunjukkan Zhang dkk. (2025) bahwa model yang stabil dan dapat
+digeneralisasi lebih bernilai klinis.
+       Dari sisi sistem, seluruh fungsi berjalan sesuai skenario black box dengan
+pembagian peran yang menegakkan pelindungan data kesehatan. Instrumen SUS
+dan TAM yang disiapkan memungkinkan evaluasi penerimaan pengguna
+dilanjutkan segera setelah survei lapangan dilaksanakan.
+
+
+
+
+                                          64
+                                     BAB V
+                                   PENUTUP
+
+A. KESIMPULAN
+
+         Berdasarkan hasil penelitian yang telah dilakukan, dapat disimpulkan
+bahwa:
+         1. Teknik SMOTE berhasil diimplementasikan khusus pada data latih (97
+berbanding 43 menjadi 97 berbanding 97) sehingga distribusi kelas seimbang
+tanpa mencemari data uji, dan penerapannya menaikkan recall kelas minoritas
+sebesar 9,09 poin dengan pasien gagal yang tidak terdeteksi berkurang dari satu
+menjadi nol.
+         2. Model Random Forest dengan hyperparameter terpilih (100 pohon,
+kedalaman 5) mencapai akurasi, presisi, recall, dan F1-score 100,00% pada 35
+data uji, dengan tiga variabel paling berpengaruh yaitu kepatuhan minum obat,
+riwayat pengobatan sebelumnya, dan panduan pengobatan.
+         3. Sistem pendukung keputusan berbasis web berhasil dibangun dengan
+dua peran pengguna dan dua belas halaman fungsional yang seluruhnya lolos
+pengujian black box, sehingga tenaga medis dapat memperoleh klasifikasi, tingkat
+risiko, dan rekomendasi tindakan klinis secara lebih dini dan objektif.
+
+B. SARAN
+
+         1. Validasi eksternal menggunakan data dari fasilitas kesehatan lain
+diperlukan untuk memastikan generalisasi model mengingat dataset penelitian
+terbatas pada 175 baris dari satu rumah sakit.
+         2. Survei SUS dan TAM sebaiknya segera dilaksanakan terhadap tenaga
+medis dan admin menggunakan instrumen pada Tabel 12 sampai Tabel 14 agar
+tingkat penerimaan sistem terukur sebelum penerapan penuh.
+         3. Pemeliharaan berkala (pencadangan basis data, pembaruan sistem, dan
+pelatihan ulang model seiring bertambahnya data) serta panduan penggunaan bagi
+pengguna perlu disiapkan agar sistem beroperasi konsisten dan berkelanjutan.
+
+
+
+
+                                        65
+                           DAFTAR PUSTAKA
+
+Alimi, A. A., Adriansyah, A. R., & Prima, P. (2024). Pengembangan Sistem
+     Deteksi    Tuberkulosis    pada   Citra    X-Ray    Menggunakan      Metode
+     Convolutional Neural Network (CNN) dengan Framework Laravel. Jurnal
+     Informatika Terpadu, 10(2), 165–171.
+
+Asrin, F. (2023). Pemodelan desain sistem berorientasi objek pada e-guest book
+     menggunakan unified modelling language. Computatio: Journal of
+     Computer Science and Information Systems, 7(1), 50–62.
+
+Azhar, N. A., Pozi, M. S. M., Din, A. M., & Jatowt, A. (2022). An investigation of
+     SMOTE based methods for imbalanced datasets with data complexity
+     analysis. IEEE Transactions on Knowledge and Data Engineering.
+
+Azzahra, A. N., Zeniarja, J., Luthfiarta, A., & Rahayu, M. (2024). Ensemble
+     Klasifikasi Penyakit Tuberculosis Pada Hasil Pengobatan Menggunakan
+     Metode Hybrid K-Nearest Neighbor (K-NN), Decision Tree dan Support
+     Vector Machine (SVM). Jurnal Media Informatika Budidarma, 8(1), 342–
+     351.
+
+Géron, A. (2022). Hands-On Machine Learning with Scikit-Learn, Keras, and
+     TensorFlow. (3rd ed.). Sebastopol, CA: O’Reilly Media.
+
+Ginting, J. N. (2023). Perancangan sistem informasi data pembelian dan
+     penjualan obat pada apotek Thamrin Medan menggunakan Visual
+     Studio.Net. LOFIAN: Jurnal Teknologi Informasi dan Komunikasi, 2(2), 8–
+     13.
+
+Hairani, H., Anggrawan, A., & Priyanto, D. (2023). Improvement performance of
+     the Random Forest method on unbalanced diabetes data classification using
+     SMOTE-Tomek Link. International Journal on Informatics Visualization,
+     7(1), 258–264.
+
+
+
+
+                                       66
+Isnaeni, P. N., Rakhmawati, H., & Tyas, F. A. (2024). Perbandingan Algoritma
+     Naïve Bayes dan C4.5 pada Klasifikasi Penyakit Tuberculosis. Journal of
+     Informatics and Computing, 3(1), 41–48.
+
+Kurniawan, A. C., & Salam, A. (2024). Seleksi Fitur Information Gain untuk
+     Optimasi Klasifikasi Penyakit Tuberkulosis. Jurnal Media Informatika
+     Budidarma, 8(1), 70. doi:10.30865/mib.v8i1.7122.
+
+Mienye, I. D., & Sun, Y. (2022). A survey of ensemble learning: Concepts,
+     algorithms, applications, and prospects. IEEE Access, 10, 99129–99149.
+
+Nurhaliza, N., Sabrina, P. N., & Ashaury, H. (2025). Klasifikasi Tuberkulosis
+     (TBC) dengan Metode Random Forest Menggunakan Teknik Re-Sampling
+     ADASYN-Tomek Links. Jurnal Algoritma, 22(2), 1822–1833.
+
+Pradipta, G. A., Wardoyo, R., Musdholifah, A., Sanjaya, I. N. H., & Ismail, M.
+     (2021). SMOTE for handling imbalanced data problem: A review. In
+     Proceedings of the 2021 Sixth International Conference on Informatics and
+     Computing (ICIC) (pp. 1–8). IEEE.
+
+Rusdah, R., & Bregastantyo, B. A. (2023). Model prognosis masa pengobatan
+     pasien tuberkulosis dengan metode C4.5. Jurnal Teknologi Informasi dan
+     Ilmu Komputer, 10(6), 1197–1204.
+
+Saarela, M., & Jauhiainen, S. (2021). Comparison of feature importance measures
+     as explanations for classification models. SN Applied Sciences, 3(2), 272.
+
+Schröer, C., Kruse, F., & Gómez, J. M. (2021). A systematic literature review on
+     applying CRISP-DM process model. Procedia Computer Science, 181, 526–
+     534.
+
+Triloka, J., & Sugianto, D. (2025). Prediction of tuberculosis treatment outcomes
+     in Indonesia using support vector machine and random forest. Journal of
+     Applied Informatics and Computing, 9(5), 2478–2485.
+
+
+
+
+                                       67
+Undang-Undang Republik Indonesia Nomor 27 Tahun 2022 tentang Pelindungan
+     Data Pribadi. (Lembaran Negara Republik Indonesia Tahun 2022 Nomor
+     196).
+
+Widjaja, A., Wibowo, S., & Parikesit, A. A. (2025). The comparison between
+     logistic regression and convolutional neural network for multi-drug
+     resistant tuberculosis prediction. Jurnal Bioteknologi & Biosains Indonesia,
+     12(1), 31–44.
+
+World Health Organization. (2024). Global Tuberculosis Report 2024. Geneva:
+     World Health Organization.
+
+World Health Organization. (2025). Global Tuberculosis Report 2025. Geneva:
+     World Health Organization.
+
+Zhang, F., Yang, Z., Geng, X., Dong, Y., Li, S., Yao, C., Shang, Y., Ren, W., Liu,
+     R., Kuang, H., Li, L., & Pang, Y. (2025). Using machine learning methods
+     to predict early treatment outcomes for multidrug-resistant or rifampicin-
+     resistant tuberculosis to enhance patient cure rates: Development and
+     validation of multiple models. Journal of Medical Internet Research, 27,
+     e69998.
+
+
+
+
+                                       68
+

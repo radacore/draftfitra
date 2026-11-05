@@ -1,0 +1,1772 @@
+{
+ "sings": null,
+ "blocks": [
+  {
+   "type": "chapter_line",
+   "runs": [
+    {
+     "t": "BAB IV",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "chapter_line",
+   "runs": [
+    {
+     "t": "HASIL DAN PEMBAHASAN",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Bab ini menyajikan hasil penelitian yang meliputi pengolahan data rekam medis, implementasi sistem klasifikasi, pelatihan dan evaluasi model ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "Random Forest",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " dengan SMOTE, serta pengujian sistem dan model. Pembahasan dilakukan dengan menghubungkan hasil yang diperoleh dengan landasan teori pada Bab II dan penelitian terkait.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "h_a",
+   "runs": [
+    {
+     "t": "A. Hasil Penerapan User Centered Design",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Pengembangan sistem mengikuti prinsip ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "User Centered Design",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " (UCD) yang menempatkan pengguna sebagai pusat setiap keputusan desain. Penerapan UCD dalam penelitian ini dilaksanakan melalui tahapan yang saling berkesinambungan, yaitu identifikasi konteks pengguna, identifikasi kebutuhan pengguna, implementasi sistem awal, evaluasi pengguna, dan implementasi perbaikan berdasarkan hasil evaluasi.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "h_sub",
+   "runs": [
+    {
+     "t": "1. Hasil Identifikasi Konteks Pengguna",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Tahap identifikasi konteks bertujuan memahami kondisi nyata pelayanan pasien MDR-TB di RSUD Labuang Baji sebelum sistem dikembangkan. Berdasarkan uraian latar belakang pada Bab I, analisis data rekam medis selama ini diolah secara manual dan bersifat deskriptif sehingga pola risiko yang kompleks tidak dikenali, serta belum tersedia sistem yang membantu tenaga medis mendeteksi dini potensi kegagalan pengobatan. Data yang dikelola berupa 175 baris rekam medis pasien MDR-TB dengan 17 variabel klinis dan demografis.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Calon pengguna sistem terdiri atas dua peran. Admin yang mengelola akun pengguna dan data rekam medis, melakukan pembersihan data, melatih ulang model, serta menjalankan skenario pengujian. Tenaga medis yang menginput data pasien, memperoleh hasil klasifikasi beserta rekomendasi, melihat riwayat klasifikasinya sendiri, dan melihat hasil evaluasi model.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "h_sub",
+   "runs": [
+    {
+     "t": "2. Hasil Identifikasi Kebutuhan Pengguna",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Berdasarkan konteks tersebut, kebutuhan pengguna yang harus dipenuhi sistem meliputi: (a) penginputan 17 variabel rekam medis dengan perhitungan otomatis IMT dan kategori usia; (b) klasifikasi keberhasilan pengobatan beserta rekomendasi tindakan klinis berprioritas; (c) riwayat hasil klasifikasi; (d) evaluasi model yang transparan (",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "confusion matrix",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ", metrik, dan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "feature importance",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": "); (e) pengujian efektivitas SMOTE dan skenario pengujian bagi admin; (f) pengelolaan data rekam medis, pembersihan data, dan pelatihan ulang model; serta (g) pengelolaan akun dengan pembagian hak akses. Setiap kebutuhan tersebut dipetakan ke modul implementasi pada bagian B sehingga tidak ada kebutuhan yang tidak tertangani.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "h_sub",
+   "runs": [
+    {
+     "t": "3. Hasil Implementasi Sistem Awal",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Berdasarkan kebutuhan tersebut, sistem awal dikembangkan langsung dalam bentuk aplikasi berbasis web yang memuat fungsi login, dasbor sesuai peran, klasifikasi pasien, riwayat klasifikasi, evaluasi model, pengelolaan data rekam medis, pembersihan data, pengujian SMOTE, skenario pengujian, dan manajemen akun. Struktur data dan formulir disesuaikan dengan variabel penelitian pada Bab III sehingga alur penggunaan mengikuti proses klasifikasi yang dirancang.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "h_sub",
+   "runs": [
+    {
+     "t": "4. Hasil Evaluasi Pengguna",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Evaluasi pengguna dilaksanakan terhadap kesesuaian fitur dengan kebutuhan, kemudahan penginputan data, kejelasan rekomendasi tindakan klinis, dan ketepatan pembagian hak akses. Temuan dan masukan yang diperoleh dicatat pada daftar berikut untuk ditindaklanjuti pada tahap perbaikan. [Daftar ini merupakan templat dan diisi setelah evaluasi lapangan dilaksanakan: (1) Aspek: ...; Temuan/masukan: ...; Status: ...; (2) Aspek: ...; Temuan/masukan: ...; Status: ...]",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "h_sub",
+   "runs": [
+    {
+     "t": "5. Hasil Implementasi Perbaikan Pengguna",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Setiap temuan pada tahap evaluasi dipetakan ke kondisi sebelum dan sesudah perbaikan agar sistem versi akhir benar-benar mencerminkan kebutuhan pengguna. [Templat dan diisi setelah evaluasi lapangan dilaksanakan: (1) Masukan: ...; Sebelum perbaikan: ...; Setelah perbaikan: ...; (2) Masukan: ...; Sebelum perbaikan: ...; Setelah perbaikan: ...]",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "h_a",
+   "runs": [
+    {
+     "t": "B. Hasil Implementasi Sistem Akhir",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "h_sub",
+   "runs": [
+    {
+     "t": "Pembagian Hak Akses Admin dan Petugas",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Sistem memiliki dua peran pengguna. Admin mengelola akun pengguna dan data rekam medis, melakukan pembersihan data, melatih ulang model, serta menjalankan skenario pengujian. Tenaga medis menginput data pasien, memperoleh hasil klasifikasi, melihat riwayat klasifikasinya sendiri, dan melihat hasil evaluasi model. Seluruh akun dibuat oleh admin dan tidak tersedia pendaftaran mandiri, sesuai ketentuan pelindungan data kesehatan pada Undang-Undang Nomor 27 Tahun 2022.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Halaman login merupakan pintu masuk sistem. Pengguna memasukkan alamat surel dan kata sandi yang telah didaftarkan oleh admin, dengan opsi ingat saya serta tautan lupa kata sandi (Gambar 10).",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1019.png",
+   "width_cm": 14.0
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "10",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Halaman Login Sistem",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Dasbor admin menampilkan tujuh kartu menu sesuai kewenangannya, yaitu Klasifikasi Pasien, Riwayat Klasifikasi, Evaluasi Model, Pengujian SMOTE, Skenario Pengujian, Data Rekam Medis, dan Manajemen Akun (Gambar 11). Dasbor tenaga medis hanya menampilkan menu yang sesuai perannya; menu Administrasi tidak ditampilkan (Gambar 12).",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1027.png",
+   "width_cm": 14.0
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "11",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Dashboard Admin",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1031.png",
+   "width_cm": 14.0
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "12",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Dashboard Tenaga Medis",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Formulir klasifikasi memuat 15 variabel isian yang dikelompokkan menjadi identitas pasien, data demografis, kondisi fisik, riwayat kesehatan, dan data pengobatan, ditambah dua variabel otomatis (kategori Usia dan IMT). Penghitung di bagian bawah tombol menunjukkan jumlah variabel yang telah terisi dari 15 variabel wajib (Gambar 13).",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1040.png",
+   "width_cm": 14.0
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "13",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Formulir Klasifikasi",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Halaman hasil menampilkan label klasifikasi beserta tingkat keyakinan, diagram probabilitas tiap kelas, tingkat risiko dan faktor risikonya, daftar rekomendasi tindakan klinis berprioritas, data 17 variabel masukan, serta variabel paling berpengaruh. Pada contoh pasien uji, model mengklasifikasikan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "Tidak Berhasil",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " dengan keyakinan 95,30% dan risiko Tinggi dengan tujuh faktor risiko (Gambar 14). Perhitungan IMT 18,37 pada contoh tersebut membuktikan variabel turunan bekerja otomatis.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1049.png",
+   "width_cm": 14.0
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "14",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Hasil Klasifikasi dan Rekomendasi",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Halaman riwayat mencatat seluruh hasil klasifikasi yang pernah dilakukan beserta pasien, hasil, keyakinan, pelaksana, dan waktu, dilengkapi penyaring berdasarkan hasil dan tombol rincian (Gambar 15).",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1054.png",
+   "width_cm": 14.0
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "15",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Riwayat Klasifikasi",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Halaman evaluasi model menyajikan metrik evaluasi, ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "confusion matrix",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ", distribusi kelas, ringkasan pembersihan data, hasil ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "cross validation",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ", ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "hyperparameter",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " terpilih, perbandingan data latih dan data uji, ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "feature importance",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ", serta laporan klasifikasi (Gambar 16).",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1066.png",
+   "width_cm": 8.5
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "16",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Evaluasi Model",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Halaman pengujian SMOTE melatih model dua kali pada data yang sama, yaitu tanpa dan dengan SMOTE, lalu menampilkan kesimpulan, perbandingan metrik data uji dan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "cross validation",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ", distribusi data latih, serta ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "confusion matrix ",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": "masing-masing skenario (Gambar 17).",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1074.png",
+   "width_cm": 9.0
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "17",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Pengujian Efektivitas SMOTE",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Halaman skenario pengujian menampilkan proporsi dan jumlah pohon terbaik berdasarkan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "F1-score",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " data uji, tabel variasi proporsi pembagian data, dan tabel variasi jumlah pohon (Gambar 18).",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1082.png",
+   "width_cm": 12.0
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "18",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Skenario Pengujian",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Halaman data rekam medis mengelola 175 baris dataset penelitian beserta tombol latih ulang model yang melatih kembali ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "Random Forest",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " dengan SMOTE dari data terkini (Gambar 19). Halaman pembersihan data merangkum hasil pemeriksaan duplikat dan nilai hilang (Gambar 20). Halaman manajemen akun mengelola akun admin dan tenaga medis (Gambar 21).",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1091.png",
+   "width_cm": 14.0
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "19",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Data Rekam Medis",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1095.png",
+   "width_cm": 14.0
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "20",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Pembersihan Data",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "image",
+   "file": "revisi_work/pdf_img/img_1103.png",
+   "width_cm": 14.0
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Gambar ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "21",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Manajemen Akun",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "h_sub",
+   "runs": [
+    {
+     "t": "Hasil Pengolahan Data",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Data penelitian berupa 175 baris rekam medis pasien MDR-TB RSUD Labuang Baji dengan 17 variabel prediktor dan satu variabel target status keberhasilan pengobatan (",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "Berhasil",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": "/",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "Tidak Berhasil",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ").",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Pemeriksaan kualitas data melalui halaman Pembersihan Data menunjukkan tidak ditemukan data duplikat (0 baris) dan tidak ditemukan nilai hilang (0 baris), sehingga seluruh 175 baris data dapat digunakan untuk pemodelan (Gambar 20).",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Empat variabel numerik (",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "Ket.Usia",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ", BB, TB, IMT) dan 13 variabel kategorikal digunakan sebagai fitur. Variabel turunan IMT dihitung dari berat dan tinggi badan, sedangkan kategori Usia ditentukan otomatis dari usia pasien (kurang dari 45 tahun tergolong usia produktif), sehingga keduanya selalu konsisten dengan data yang dimasukkan tenaga medis.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Variabel kategorikal dikonversi menjadi numerik melalui ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "label encoding",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ". Dataset dibagi 80:20 secara ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "stratified",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " menjadi 140 data latih (97 Berhasil, 43 Tidak Berhasil) dan 35 data uji (24 Berhasil, 11 Tidak Berhasil). Normalisasi ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "StandardScaler",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " diterapkan sebelum SMOTE, kemudian SMOTE menyeimbangkan data latih menjadi 97 berbanding 97 (194 sampel). Distribusi awal 121 Berhasil (69,14%) berbanding 54 Tidak Berhasil (30,86%) dengan rasio ketidakseimbangan 2,24:1.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "h_sub",
+   "runs": [
+    {
+     "t": "Hasil Pelatihan dan Evaluasi Model",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Pencarian ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "grid",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " menghasilkan kombinasi ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "hyperparameter",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " terbaik pada Tabel 4 berdasarkan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "F1-score cross validation",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " sebesar 80,64%. Model tersebut kemudian dievaluasi pada 35 data uji yang belum pernah dilihat selama pelatihan.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Tabel ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "4",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Hyperparameter Terpilih",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "table_slot",
+   "table_no": 4
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Hasil evaluasi pada data uji mencapai kesempurnaan pada keempat metrik sebagaimana Tabel 6, dengan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "confusion matrix pada Tabel 5 yang menunjukkan tidak satu pun pasien gagal yang tidak terdeteksi (false negative",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " nol).",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Tabel ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "5",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Confusion Matrix Data Uji",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "table_slot",
+   "table_no": 5
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Tabel ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "6",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Metrik Evaluasi Data Uji",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "table_slot",
+   "table_no": 6
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Validasi silang lima lipatan pada data latih pada Tabel 7 memberikan estimasi performa yang lebih stabil dengan rata-rata ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "F1-score",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " 80,64% dan simpangan baku 0,1277. Rata-rata ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "recall",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " 74,72% dengan simpangan baku 0,1533 menunjukkan variasi antar lipatan yang cukup besar sebagai konsekuensi ukuran dataset yang kecil (175 baris). Selisih metrik data latih dan data uji yang kecil (akurasi 99,29% berbanding 100,00%) menandakan model tidak mengalami ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "overfitting",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ".",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Tabel ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "7",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Hasil Cross Validation Lima Lipatan",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "table_slot",
+   "table_no": 7
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Tiga variabel paling berpengaruh adalah Kepatuhan Minum Obat (33,19%), Riwayat Pengobatan Sebelumnya (18,65%), dan Panduan Pengobatan (8,21%), sedangkan Riwayat HIV (0,22%) paling kecil pengaruhnya. Urutan ini selaras dengan faktor risiko prioritas pada rekomendasi klinis sistem.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "h_a",
+   "runs": [
+    {
+     "t": "C. Hasil Pengujian Black Box",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Pengujian efektivitas SMOTE membandingkan model yang dilatih pada dataset asli dan dataset seimbang. Pada data uji, SMOTE menaikkan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "recall",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " kelas minoritas dari 90,91% menjadi 100,00% atau selisih 9,09 poin, dengan pasien gagal yang tidak terdeteksi berkurang dari satu menjadi nol (Tabel 8). Pada ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "cross validation",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " arah selisihnya berlawanan karena dataset kecil, sebagaimana dijelaskan sendiri oleh halaman pengujian; acuan kesimpulan tetap metrik data uji.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Tabel ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "8",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Perbandingan Model Tanpa dan Dengan SMOTE",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "table_slot",
+   "table_no": 8
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Skenario variasi proporsi menunjukkan pembagian 80:20 sebagai yang terbaik dengan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "F1-score",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " data uji 100,00% berbanding 93,33% pada 70:30 (Tabel 9). Skenario variasi jumlah pohon menunjukkan 100 pohon sebagai yang terbaik dengan selisih ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "F1-score",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " latih dan uji nol, sedangkan 50, 200, 300, dan 500 pohon menghasilkan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "F1-score",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " 95,24% (Tabel 10).",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Tabel ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "9",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Skenario Variasi Proporsi Data",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "table_slot",
+   "table_no": 9
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Tabel ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "10",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Skenario Variasi Jumlah Pohon",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "table_slot",
+   "table_no": 10
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Pengujian ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "black box",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " pada Tabel 11 memeriksa kesesuaian fungsi aplikasi dengan keluaran yang diharapkan. Seluruh skenario berstatus berhasil.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Tabel ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "11",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Hasil Pengujian Black Box",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "table_slot",
+   "table_no": 11
+  },
+  {
+   "type": "h_a",
+   "runs": [
+    {
+     "t": "D. Hasil Validasi System Usability Scale",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Evaluasi penerimaan pengguna menggunakan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "System Usability Scale ",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": "(SUS) sepuluh pernyataan dan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "Technology Acceptance Model",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " (TAM) enam belas butir. Instrumen disiapkan pada bagian ini; pengisian dan perhitungan dilakukan setelah survei terhadap tenaga medis dan admin, sehingga tabel rekapitulasi di bawah ini masih kosong.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Skor SUS tiap responden dihitung dengan aturan: butir positif dikurangi satu, lima dikurangi butir negatif, seluruhnya dijumlahkan lalu dikali 2,5 sehingga rentang skor 0 sampai 100.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Tabel ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "12",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Pernyataan Kuesioner SUS",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "table_slot",
+   "table_no": 12
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Tabel ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "13",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Rekapitulasi Jawaban SUS (Diisi Setelah Survei)",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "table_slot",
+   "table_no": 13
+  },
+  {
+   "type": "h_sub",
+   "runs": [
+    {
+     "t": "Instrumen Evaluasi TAM",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Penilaian TAM memakai skala Likert 1 sampai 5 pada empat konstruk: kemudahan penggunaan (",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "PEOU",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ": mudah dipelajari, mudah dioperasikan, interaksi jelas, mudah terampil), kebermanfaatan (",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "PU",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ": mempercepat identifikasi risiko, meningkatkan ketepatan deteksi, membantu tindak lanjut, berguna di praktik klinis), sikap (",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "ATU",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ": berpandangan positif, bijak menggunakan, mendukung penerapan, percaya pada hasil), dan niat perilaku (",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "BI",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ": berniat rutin memakai, merekomendasikan, memprioritaskan, berniat lanjut). Rata-rata tiap konstruk dan keseluruhan dihitung dari seluruh jawaban; kategori sangat tinggi pada rentang di atas 4,20.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "caption",
+   "runs": [
+    {
+     "t": "Tabel ",
+     "i": false,
+     "b": true
+    },
+    {
+     "t": "14",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": ". Rekapitulasi Penilaian TAM (Diisi Setelah Survei)",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "table_slot",
+   "table_no": 14
+  },
+  {
+   "type": "h_a",
+   "runs": [
+    {
+     "t": "F. Pembahasan",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Hasil evaluasi menunjukkan model mencapai metrik sempurna pada 35 data uji dengan nol ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "false negative",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ". Angka ini perlu dibaca bersama hasil ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "cross validation",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " yang rata-rata ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "recall",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": "-nya 74,72% dengan simpangan baku 0,1533; variasi antar lipatan tersebut wajar mengingat dataset hanya 175 baris sehingga tiap lipatan validasi hanya berisi sekitar tujuh sampel minoritas. Selisih kecil antara performa latih dan uji menandakan tidak ada ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "overfitting",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " yang berarti.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Kontribusi SMOTE terbukti pada metrik data uji dengan kenaikan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "recall ",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": "9,09 poin dan hilangnya satu kasus gagal yang tidak terdeteksi, sejalan dengan temuan Hairani dkk. (2023) serta Kurniawan dan Salam (2024) bahwa penyeimbangan data meningkatkan sensitivitas model. Urutan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "feature importance ",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": "yang menempatkan kepatuhan minum obat (33,19%) di puncak juga bermakna klinis dan konsisten dengan faktor risiko prioritas pada rekomendasi sistem.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Dibandingkan penelitian terkait, pendekatan ini melengkapi Triloka dan Sugianto (2025) yang menekankan pentingnya penanganan ketidakseimbangan, serta Nurhaliza dkk. (2025) yang melaporkan peningkatan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "recall",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " melalui ADASYN-Tomek Links. Berbeda dengan Azzahra dkk. (2024) yang menggabungkan tiga algoritma dan Widjaja dkk. (2025) yang membandingkan regresi logistik dengan CNN, penelitian ini mempertahankan satu algoritma (",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "Random Forest",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ") agar interpretabilitas bagi tenaga medis tetap terjaga, sebagaimana ditunjukkan Zhang dkk. (2025) bahwa model yang stabil dan dapat digeneralisasi lebih bernilai klinis.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Dari sisi sistem, seluruh fungsi berjalan sesuai skenario ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "black box",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " dengan pembagian peran yang menegakkan pelindungan data kesehatan. Instrumen SUS dan TAM yang disiapkan memungkinkan evaluasi penerimaan pengguna dilanjutkan segera setelah survei lapangan dilaksanakan.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "chapter_line",
+   "runs": [
+    {
+     "t": "BAB V",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "chapter_line",
+   "runs": [
+    {
+     "t": "PENUTUP",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "h_a",
+   "runs": [
+    {
+     "t": "A. KESIMPULAN",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "Berdasarkan hasil penelitian yang telah dilakukan, dapat disimpulkan bahwa:",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "1. Teknik SMOTE berhasil diimplementasikan khusus pada data latih (97 berbanding 43 menjadi 97 berbanding 97) sehingga distribusi kelas seimbang tanpa mencemari data uji, dan penerapannya menaikkan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "recall",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " kelas minoritas sebesar 9,09 poin dengan pasien gagal yang tidak terdeteksi berkurang dari satu menjadi nol.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "2. Model ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "Random Forest",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " dengan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "hyperparameter",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " terpilih (100 pohon, kedalaman 5) mencapai akurasi, presisi, ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "recall",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ", dan ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "F1-score",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": " 100,00% pada 35 data uji, dengan tiga variabel paling berpengaruh yaitu kepatuhan minum obat, riwayat pengobatan sebelumnya, dan panduan pengobatan.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "3. Sistem pendukung keputusan berbasis web berhasil dibangun dengan dua peran pengguna dan dua belas halaman fungsional yang seluruhnya lolos pengujian ",
+     "i": false,
+     "b": false
+    },
+    {
+     "t": "black box",
+     "i": true,
+     "b": false
+    },
+    {
+     "t": ", sehingga tenaga medis dapat memperoleh klasifikasi, tingkat risiko, dan rekomendasi tindakan klinis secara lebih dini dan objektif.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "h_a",
+   "runs": [
+    {
+     "t": "B. SARAN",
+     "i": false,
+     "b": true
+    }
+   ]
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "1. Validasi eksternal menggunakan data dari fasilitas kesehatan lain diperlukan untuk memastikan generalisasi model mengingat dataset penelitian terbatas pada 175 baris dari satu rumah sakit.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "2. Survei SUS dan TAM sebaiknya segera dilaksanakan terhadap tenaga medis dan admin menggunakan instrumen pada Tabel 12 sampai Tabel 14 agar tingkat penerimaan sistem terukur sebelum penerapan penuh.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  },
+  {
+   "type": "body",
+   "runs": [
+    {
+     "t": "3. Pemeliharaan berkala (pencadangan basis data, pembaruan sistem, dan pelatihan ulang model seiring bertambahnya data) serta panduan penggunaan bagi pengguna perlu disiapkan agar sistem beroperasi konsisten dan berkelanjutan.",
+     "i": false,
+     "b": false
+    }
+   ],
+   "x0": 148.9
+  }
+ ]
+}
