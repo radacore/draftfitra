@@ -58,21 +58,11 @@
 
 \section{Mengapa Kita Perlu Menghitung dengan Tangan?}
 
-Bayangkan kamu sedang duduk di ruang dosen pembimbing. Beliau bertanya: \emph{``Program ini
-katanya bisa menebak pasien mana yang pengobatannya gagal. Coba jelaskan, bagaimana caranya
-sampai ia bisa menebak?''}
+Kita pakai contoh yang sangat sederhana --- hanya \textbf{8 pasien} dan \textbf{3 ciri} ---
+supaya setiap angka dapat kita hitung dengan tangan. Meskipun sederhana, rumus yang kita pakai
+adalah \textbf{rumus yang asli}, yang benar-benar ada di dalam program.
 
-Komputer, sebenarnya, tidak lebih pintar dari kita. Ia hanya mengerjakan hitungan-hitungan
-matematika dengan sangat teliti dan sangat cepat. Kalau kita bisa menirukan hitungan itu dengan
-angka kecil di kertas, berarti kita benar-benar memahami apa yang terjadi di dalam ``kotak hitam''
-program tersebut.
-
-Di dokumen ini kita akan menempuh perjalanan itu pelan-pelan. Kita pakai contoh sangat sederhana
---- hanya \textbf{8 pasien} dan \textbf{3 ciri} --- supaya setiap angka bisa kita hitung dengan
-tangan, sama seperti mengajari seorang anak sekolah dasar. Tetapi rumus yang kita pakai adalah
-\textbf{rumus yang asli}, yang benar-benar ada di dalam program.
-
-Perjalanan kita punya lima langkah besar:
+Berikut lima langkah besarnya:
 \begin{enumerate}[label=\textbf{Langkah \arabic*.}, leftmargin=*]
   \item Menyiapkan data dan mengubah kata menjadi angka.
   \item Mengukur seberapa ``mirip'' dua pasien.
@@ -162,7 +152,10 @@ yang sebenarnya penting jadi tidak terlihat. Karena itu, sebelum dihitung, semua
 \emph{disamakan skalanya}. Rumus yang dipakai adalah \textbf{skor-$z$}:
 
 \begin{rumus}
+Rumus umum:
 \[ z = \frac{x - \mu}{\sigma} \]
+Dengan angka (usia P1 $= 30$; rata-rata usia $\mu = 42{,}5$; simpangan baku $\sigma \approx 11{,}46$):
+\[ z = \frac{30 - 42{,}5}{11{,}46} = \frac{-12{,}5}{11{,}46} \approx -1{,}09 \]
 \end{rumus}
 
 \noindent Artinya: setiap nilai $x$ dikurangi rata-rata kolomnya ($\mu$), lalu dibagi dengan
@@ -187,7 +180,10 @@ yang punya banyak ciri.
 \subsection{Rumus aslinya}
 
 \begin{rumus}
+Rumus umum:
 \[ d(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2} \]
+Dengan angka (P6 $(45;0;60)$ dan P7 $(60;0;65)$):
+\[ d = \sqrt{(45-60)^2 + (0-0)^2 + (60-65)^2} = \sqrt{225 + 0 + 25} = \sqrt{250} \approx 15{,}81 \]
 \end{rumus}
 
 \noindent Mari kita bedah simbol demi simbol:
@@ -252,8 +248,11 @@ pasien minoritas yang berdekatan. Ibaratnya, kalau ada dua siswa yang mirip, kit
 \subsection{Rumus aslinya}
 
 \begin{rumus}
+Rumus umum:
 \[ \mathbf{x}_{\text{baru}} = \mathbf{x}_i + \lambda \cdot \bigl(\mathbf{x}_{zi} - \mathbf{x}_i\bigr),
 \qquad \lambda \sim U(0,1) \]
+Dengan angka (P6 $\to$ P7, $\lambda = 0{,}5$):
+\[ \mathbf{x}_{\text{baru}} = (45;0;60) + 0{,}5 \cdot \bigl((60;0;65) - (45;0;60)\bigr) = (52{,}5;\ 0;\ 62{,}5) \]
 \end{rumus}
 
 \noindent Penjelasannya:
@@ -324,7 +323,10 @@ Bayangkan isi sebuah kantong kelereng. Kalau semua kelerengnya merah, kantong it
 kecampuran ini: \textbf{0 berarti benar-benar bersih}, semakin besar berarti semakin campur.
 
 \begin{rumus}
+Rumus umum:
 \[ \text{Gini}(t) = 1 - \sum_{k=1}^{K} p_k^2 \]
+Dengan angka (5 ``Berhasil'' dan 5 ``Tidak Berhasil'' dari 10 data):
+\[ \text{Gini} = 1 - \left(\tfrac{5}{10}\right)^2 - \left(\tfrac{5}{10}\right)^2 = 1 - (0{,}5)^2 - (0{,}5)^2 = 0{,}5 \]
 \end{rumus}
 
 \noindent Di sini $p_k$ adalah bagian anggota kelas ke-$k$ di dalam sebuah simpul $t$. Untuk
@@ -438,7 +440,10 @@ dokter lalu mengambil kesimpulan bersama. Kumpulan pohon ini disebut \textbf{Ran
 \subsection{Rumus aslinya}
 
 \begin{rumus}
+Rumus umum:
 \[ \hat{y} = \operatorname{mode}\{\, h_1(\mathbf{x}),\ h_2(\mathbf{x}),\ \ldots,\ h_T(\mathbf{x})\,\} \]
+Dengan angka (tiga pohon memberi suara $0$, $1$, $0$):
+\[ \hat{y} = \operatorname{mode}\{\, 0,\ 1,\ 0\,\} = 0 \quad (\text{Berhasil}) \]
 \end{rumus}
 
 \noindent Di sini $h_t(\mathbf{x})$ adalah jawaban pohon ke-$t$ untuk pasien $\mathbf{x}$, dan
@@ -476,12 +481,11 @@ Karena ``Berhasil'' mendapat suara terbanyak (2 dari 3), hasil akhirnya:
 Keyakinan menunjukkan seberapa banyak pohon yang setuju dengan jawaban pemenang.
 
 \begin{rumus}
+Rumus umum:
 \[ \text{Keyakinan} = \frac{\text{jumlah suara pemenang}}{T} \times 100\% \]
+Dengan angka (2 suara pemenang dari 3 pohon):
+\[ \text{Keyakinan} = \frac{2}{3} \times 100\% = 0{,}6667 \times 100\% = 66{,}67\% \]
 \end{rumus}
-
-\[
-\text{Keyakinan} = \frac{2}{3} \times 100\% = 0{,}6667 \times 100\% = 66{,}67\%
-\]
 
 \begin{hasil}
 Sistem \textbf{66{,}67\% yakin} pasien tersebut akan \textbf{Berhasil}. Jika ketiga pohon
@@ -588,7 +592,7 @@ Mari kita lihat kembali seluruh perjalanannya dalam satu tarikan napas:
 \end{enumerate}
 
 \begin{catatan}
-Contoh ini sengaja dikecilkan (3 ciri, 8 pasien, 3 pohon) agar bisa dihitung dengan tangan.
+Contoh ini dibuat kecil (3 ciri, 8 pasien, 3 pohon) agar dapat dihitung dengan tangan.
 Model pada penelitian sesungguhnya lebih besar --- 175 baris data, 17 variabel, dan 100 pohon
 --- namun \textbf{langkah-langkahnya sama persis}; hanya diulang lebih banyak kali. Jadi kalau
 kita paham contoh kecil ini, kita paham juga cara kerja model yang sebenarnya.
