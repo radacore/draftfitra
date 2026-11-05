@@ -34,6 +34,55 @@ bab45 = json.load(open(os.path.join(BASE, "revisi_work", "bab45.json")))
 refs = json.load(open(os.path.join(BASE, "revisi_work", "refs.json")))
 img_dims = json.load(open(os.path.join(BASE, "revisi_work", "img_dims.json")))
 
+# ---- selaraskan teks BAB IV dengan perubahan aplikasi (tanggal awal + status pengobatan) ----
+def _patch_bab45(blocks, marker, old=None, new=None, new_full=None):
+    for x in blocks:
+        if "runs" not in x:
+            continue
+        if marker not in "".join(r["t"] for r in x["runs"]):
+            continue
+        if new_full is not None:
+            x["runs"][0]["t"] = new_full
+            for r in x["runs"][1:]:
+                if r["t"] and not r["t"][0].isspace():
+                    r["t"] = " " + r["t"]
+            return True
+        for r in x["runs"]:
+            if old in r["t"]:
+                r["t"] = r["t"].replace(old, new)
+                return True
+    return False
+
+
+_b45 = bab45_runs["blocks"]
+# Blok 27 — Formulir Klasifikasi
+_patch_bab45(_b45, "Formulir klasifikasi memuat 15 variabel isian", new_full=(
+    "Formulir klasifikasi memuat 16 variabel isian yang dikelompokkan menjadi identitas pasien, "
+    "data demografis, kondisi fisik, riwayat kesehatan, dan data pengobatan. Lima belas variabel "
+    "di antaranya menjadi masukan model, sedangkan Tanggal Awal Pengobatan dipakai untuk menurunkan "
+    "durasi dan status pengobatan. Sistem juga menghitung empat informasi turunan secara otomatis, "
+    "yaitu Kategori Usia dan IMT yang termasuk variabel model, serta Durasi Pengobatan dan Status "
+    "Pengobatan yang bersifat informasi tampilan dan tidak digunakan sebagai variabel model. "
+    "Penghitung di bagian bawah tombol menunjukkan jumlah variabel yang telah terisi dari 16 "
+    "variabel wajib (Gambar 13)."))
+# Blok 30 — Hasil Klasifikasi
+_patch_bab45(_b45, "serta variabel paling berpengaruh. Pada contoh",
+              old="berpengaruh. Pada contoh",
+              new=("berpengaruh. Selain itu, ditampilkan pula kartu Informasi Pengobatan yang memuat "
+                   "tanggal awal, durasi, dan status pengobatan sebagai informasi turunan yang tidak "
+                   "digunakan sebagai variabel model. Pada contoh"))
+# Blok 33 — Riwayat Klasifikasi
+_patch_bab45(_b45, "Halaman riwayat mencatat seluruh hasil klasifikasi", new_full=(
+    "Halaman riwayat mencatat seluruh hasil klasifikasi yang pernah dilakukan beserta pasien, hasil, "
+    "keyakinan, pelaksana, dan waktu, dilengkapi penyaring berdasarkan hasil dan tombol rincian. "
+    "Di bawah nama pasien ditampilkan tanggal awal, durasi, dan status pengobatan sebagai informasi "
+    "turunan (Gambar 15)."))
+# Blok 9 — Kebutuhan pengguna
+_patch_bab45(_b45, "penginputan 17 variabel rekam medis dengan perhitungan otomatis",
+              old="dengan perhitungan otomatis IMT dan kategori usia;",
+              new=("dengan perhitungan otomatis IMT dan kategori usia serta pencatatan tanggal awal "
+                   "pengobatan untuk menurunkan durasi dan status pengobatan;"))
+
 REVISION = (" Jumlah rekam medis pasien MDR-TB yang dihimpun sebanyak 175 data, "
             "terdiri atas 121 pasien dengan status pengobatan berhasil dan 54 pasien "
             "dengan status pengobatan tidak berhasil.")
@@ -274,26 +323,26 @@ TOC = [
     ("BAB IV HASIL DAN PEMBAHASAN", "46", 0),
     ("A. Hasil Penerapan User Centered Design", "46", 36),
     ("B. Hasil Implementasi Sistem Akhir", "48", 36),
-    ("C. Hasil Pengujian Black Box", "59", 36),
-    ("D. Hasil Validasi System Usability Scale", "61", 36),
-    ("F. Pembahasan", "62", 36),
-    ("BAB V PENUTUP", "64", 0),
-    ("A. KESIMPULAN", "64", 36), ("B. SARAN", "64", 36),
-    ("DAFTAR PUSTAKA", "65", 0),
+    ("C. Hasil Pengujian Black Box", "61", 36),
+    ("D. Hasil Validasi System Usability Scale", "63", 36),
+    ("F. Pembahasan", "64", 36),
+    ("BAB V PENUTUP", "66", 0),
+    ("A. KESIMPULAN", "66", 36), ("B. SARAN", "66", 36),
+    ("DAFTAR PUSTAKA", "67", 0),
 ]
 
 DAFTAR_TABEL = [
     ("Tabel 1 Simbol Flowchart", "20"), ("Tabel 2 Penelitian Terkait", "28"),
-    ("Tabel 3 Jadwal Penelitian", "32"), ("Tabel 4 Hyperparameter Terpilih", "58"),
-    ("Tabel 5 Confusion Matrix Data Uji", "58"), ("Tabel 6 Metrik Evaluasi Data Uji", "58"),
-    ("Tabel 7 Hasil Cross Validation Lima Lipatan", "59"),
-    ("Tabel 8 Perbandingan Model Tanpa dan Dengan SMOTE", "59"),
-    ("Tabel 9 Skenario Variasi Proporsi Data", "59"),
-    ("Tabel 10 Skenario Variasi Jumlah Pohon", "60"),
-    ("Tabel 11 Hasil Pengujian Black Box", "60"),
-    ("Tabel 12 Pernyataan Kuesioner SUS", "61"),
-    ("Tabel 13 Rekapitulasi Jawaban SUS (Diisi Setelah Survei)", "61"),
-    ("Tabel 14 Rekapitulasi Penilaian TAM (Diisi Setelah Survei)", "62"),
+    ("Tabel 3 Jadwal Penelitian", "32"), ("Tabel 4 Hyperparameter Terpilih", "60"),
+    ("Tabel 5 Confusion Matrix Data Uji", "60"), ("Tabel 6 Metrik Evaluasi Data Uji", "60"),
+    ("Tabel 7 Hasil Cross Validation Lima Lipatan", "61"),
+    ("Tabel 8 Perbandingan Model Tanpa dan Dengan SMOTE", "61"),
+    ("Tabel 9 Skenario Variasi Proporsi Data", "61"),
+    ("Tabel 10 Skenario Variasi Jumlah Pohon", "62"),
+    ("Tabel 11 Hasil Pengujian Black Box", "62"),
+    ("Tabel 12 Pernyataan Kuesioner SUS", "63"),
+    ("Tabel 13 Rekapitulasi Jawaban SUS (Diisi Setelah Survei)", "63"),
+    ("Tabel 14 Rekapitulasi Penilaian TAM (Diisi Setelah Survei)", "64"),
 ]
 
 DAFTAR_GAMBAR = [
@@ -305,11 +354,11 @@ DAFTAR_GAMBAR = [
     ("Gambar 8 Class Diagram Klasifikasi Keberhasilan Pengobatan", "39"),
     ("Gambar 9 Flowchart Metode SMOTE dan Random Forest", "40"),
     ("Gambar 10 Halaman Login Sistem", "48"), ("Gambar 11 Dashboard Admin", "49"),
-    ("Gambar 12 Dashboard Tenaga Medis", "49"), ("Gambar 13 Formulir Klasifikasi", "50"),
-    ("Gambar 14 Hasil Klasifikasi dan Rekomendasi", "51"), ("Gambar 15 Riwayat Klasifikasi", "51"),
-    ("Gambar 16 Evaluasi Model", "53"), ("Gambar 17 Pengujian Efektivitas SMOTE", "54"),
-    ("Gambar 18 Skenario Pengujian", "55"), ("Gambar 19 Data Rekam Medis", "56"),
-    ("Gambar 20 Pembersihan Data", "56"), ("Gambar 21 Manajemen Akun", "57"),
+    ("Gambar 12 Dashboard Tenaga Medis", "49"), ("Gambar 13 Formulir Klasifikasi", "51"),
+    ("Gambar 14 Hasil Klasifikasi dan Rekomendasi", "53"), ("Gambar 15 Riwayat Klasifikasi", "54"),
+    ("Gambar 16 Evaluasi Model", "55"), ("Gambar 17 Pengujian Efektivitas SMOTE", "56"),
+    ("Gambar 18 Skenario Pengujian", "57"), ("Gambar 19 Data Rekam Medis", "58"),
+    ("Gambar 20 Pembersihan Data", "58"), ("Gambar 21 Manajemen Akun", "59"),
 ]
 
 front_heading("DAFTAR ISI")
