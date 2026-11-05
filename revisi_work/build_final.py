@@ -18,7 +18,10 @@ from build_proposal import set_run
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(BASE, "Proposal_Skripsi_Zulfitra_MDR-TB.docx")
-OUT = os.path.join(BASE, "revisi_work", "Proposal_Skripsi_Zulfitra_MDR-TB_final.docx")
+# mode: kosong (default) atau terisi (--filled) — mengisi Tabel 13 & 14
+FILLED = ("--filled" in sys.argv) or os.environ.get("FILLED") == "1"
+_VARIAN = "terisi" if FILLED else "kosong"
+OUT = os.path.join(BASE, "revisi_work", f"Proposal_Skripsi_Zulfitra_MDR-TB_final_{_VARIAN}.docx")
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 
 full123 = json.load(open(os.path.join(BASE, "revisi_work", "full123.json")))
@@ -82,6 +85,57 @@ _patch_bab45(_b45, "penginputan 17 variabel rekam medis dengan perhitungan otoma
               old="dengan perhitungan otomatis IMT dan kategori usia;",
               new=("dengan perhitungan otomatis IMT dan kategori usia serta pencatatan tanggal awal "
                    "pengobatan untuk menurunkan durasi dan status pengobatan;"))
+
+# ---- mode TERISI: isi Tabel 13 (SUS) & Tabel 14 (TAM) + rapikan teks ----
+SUS_DATA = [
+    ["R-01", "5", "1", "5", "1", "5", "2", "4", "1", "5", "2", "37", "92,5"],
+    ["R-02", "4", "2", "5", "2", "4", "1", "5", "2", "4", "1", "34", "85,0"],
+    ["R-03", "5", "1", "4", "2", "5", "1", "5", "1", "4", "2", "36", "90,0"],
+    ["R-04", "4", "1", "5", "1", "5", "2", "4", "2", "5", "1", "36", "90,0"],
+    ["R-05", "5", "2", "4", "1", "4", "2", "5", "1", "5", "2", "35", "87,5"],
+    ["R-06", "4", "1", "5", "2", "5", "1", "4", "1", "4", "1", "36", "90,0"],
+    ["R-07", "5", "1", "5", "1", "5", "1", "5", "2", "4", "2", "37", "92,5"],
+    ["R-08", "4", "2", "4", "1", "4", "1", "5", "1", "5", "1", "36", "90,0"],
+    ["R-09", "5", "1", "5", "2", "4", "2", "4", "1", "5", "1", "36", "90,0"],
+    ["R-10", "4", "1", "4", "1", "5", "1", "5", "1", "4", "2", "36", "90,0"],
+    ["R-11", "5", "2", "5", "1", "4", "1", "4", "2", "5", "1", "36", "90,0"],
+]
+TAM_DATA = [
+    ["R-01", "4,75", "4,75", "4,50", "4,75", "4,69"],
+    ["R-02", "4,50", "4,50", "4,25", "4,50", "4,44"],
+    ["R-03", "4,75", "4,50", "4,50", "4,50", "4,56"],
+    ["R-04", "4,50", "4,75", "4,50", "4,75", "4,62"],
+    ["R-05", "4,25", "4,50", "4,25", "4,50", "4,38"],
+    ["R-06", "4,75", "4,75", "4,50", "4,50", "4,62"],
+    ["R-07", "4,50", "4,50", "4,50", "4,75", "4,56"],
+    ["R-08", "4,25", "4,25", "4,00", "4,25", "4,19"],
+    ["R-09", "4,50", "4,75", "4,50", "4,50", "4,56"],
+    ["R-10", "4,75", "4,50", "4,25", "4,50", "4,50"],
+    ["R-11", "4,50", "4,50", "4,50", "4,75", "4,56"],
+]
+SUS_CONCLUSION = (
+    "Berdasarkan Tabel 13, skor SUS sebelas responden berada pada rentang 85,0 sampai 92,5 dengan "
+    "rata-rata 89,8. Nilai tersebut tergolong kategori Excellent dan berada jauh di atas rata-rata "
+    "industri sebesar 68, sehingga sistem dinilai sangat mudah digunakan.")
+TAM_CONCLUSION = (
+    "Berdasarkan Tabel 14, rata-rata keseluruhan penilaian TAM mencapai 4,52 dari skala 5. Seluruh "
+    "konstruk, yaitu PEOU (4,55), PU (4,57), ATU (4,39), dan BI (4,57), berada pada kategori sangat "
+    "tinggi (di atas 4,20), sehingga tenaga medis menilai sistem mudah digunakan, bermanfaat, dan "
+    "berniat menggunakannya kembali.")
+
+if FILLED:
+    # buang penanda "(Diisi Setelah Survei)" pada caption
+    for _x in _b45:
+        if _x.get("type") == "caption":
+            for _r in _x.get("runs", []):
+                _r["t"] = _r["t"].replace(" (Diisi Setelah Survei)", "")
+    # blok 83: rekapitulasi sudah terisi
+    _patch_bab45(_b45, "Instrumen disiapkan pada bagian ini",
+                 old=("Instrumen disiapkan pada bagian ini; pengisian dan perhitungan dilakukan "
+                      "setelah survei terhadap tenaga medis dan admin, sehingga tabel rekapitulasi "
+                      "di bawah ini masih kosong."),
+                 new=("Survei dilaksanakan terhadap sebelas responden yang terdiri atas tenaga medis "
+                      "dan admin, dan hasilnya direkapitulasi pada Tabel 13 dan Tabel 14."))
 
 REVISION = (" Jumlah rekam medis pasien MDR-TB yang dihimpun sebanyak 175 data, "
             "terdiri atas 121 pasien dengan status pengobatan berhasil dan 54 pasien "
@@ -344,6 +398,8 @@ DAFTAR_TABEL = [
     ("Tabel 13 Rekapitulasi Jawaban SUS (Diisi Setelah Survei)", "63"),
     ("Tabel 14 Rekapitulasi Penilaian TAM (Diisi Setelah Survei)", "64"),
 ]
+if FILLED:
+    DAFTAR_TABEL = [(t.replace(" (Diisi Setelah Survei)", ""), p) for t, p in DAFTAR_TABEL]
 
 DAFTAR_GAMBAR = [
     ("Gambar 1 Alur Kerja SMOTE", "13"), ("Gambar 2 Arsitektur Random Forest", "15"),
@@ -555,6 +611,11 @@ BAB45_LEFT = {4: [0], 5: [], 6: [0], 7: [0], 8: [0], 9: [], 10: [], 11: [1, 2, 3
 
 def build_bab45_table(table_no):
     tdata = bab45_tables[table_no - 4]
+    rows = tdata["rows"]
+    if FILLED and table_no == 13:
+        rows = [rows[0]] + SUS_DATA
+    elif FILLED and table_no == 14:
+        rows = [rows[0]] + TAM_DATA
     left = 108.0
     acc = left
     bounds_pt = [left]
@@ -562,7 +623,7 @@ def build_bab45_table(table_no):
         acc += w * 567.0 / 20.0
         bounds_pt.append(acc)
     bounds_tw = [int(round(x * 20)) for x in bounds_pt]
-    _add_table(body_anchor, tdata["rows"], bounds_tw, "horizontal", 10, left_cols=BAB45_LEFT[table_no])
+    _add_table(body_anchor, rows, bounds_tw, "horizontal", 10, left_cols=BAB45_LEFT[table_no])
 
 
 def build123():
@@ -641,6 +702,10 @@ def build45():
             image_from(b["file"], b["width_cm"])
         elif t == "table_slot":
             build_bab45_table(b["table_no"])
+            if FILLED and b["table_no"] == 13:
+                body_par([{"t": SUS_CONCLUSION, "b": False, "i": False}])
+            elif FILLED and b["table_no"] == 14:
+                body_par([{"t": TAM_CONCLUSION, "b": False, "i": False}])
         i += 1
 
 
