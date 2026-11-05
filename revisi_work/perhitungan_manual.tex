@@ -1,0 +1,597 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+
+\definecolor{biru}{HTML}{1E3A8A}
+\definecolor{birumuda}{HTML}{EFF4FF}
+\definecolor{kuning}{HTML}{FFFBEB}
+\definecolor{kuningg}{HTML}{F59E0B}
+\definecolor{hijau}{HTML}{15803D}
+\definecolor{merah}{HTML}{B91C1C}
+
+\titleformat{\section}{\normalfont\Large\bfseries\color{biru}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{biru}}{\thesubsection}{0.5em}{}
+
+\newtcolorbox{hasil}[1][Hasil]{
+  colback=birumuda, colframe=biru, boxrule=1pt, arc=3pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,
+  fonttitle=\bfseries\color{biru}, title=#1
+}
+\newtcolorbox{catatan}[1][Catatan]{
+  colback=kuning, colframe=kuningg, boxrule=1pt, arc=3pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,
+  fonttitle=\bfseries, title=#1
+}
+\newtcolorbox{rumus}{
+  colback=gray!8, colframe=gray!40, boxrule=0.6pt, arc=3pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\color{gray} Perhitungan Manual SMOTE \& Random Forest}
+\fancyfoot[R]{\small\color{gray}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries\color{biru} Perhitungan Manual}\\[4pt]
+{\large SMOTE dan Random Forest}\\[2pt]
+{\normalsize\color{gray} Dijelaskan langkah demi langkah, dengan contoh yang mudah diikuti}\\[2pt]
+{\normalsize\color{gray} dan rumus matematika yang sesungguhnya dipakai komputer}
+\end{center}
+
+\vspace{4pt}
+\hrule
+\vspace{10pt}
+
+\section{Mengapa Kita Perlu Menghitung dengan Tangan?}
+
+Bayangkan kamu sedang duduk di ruang dosen pembimbing. Beliau bertanya: \emph{``Program ini
+katanya bisa menebak pasien mana yang pengobatannya gagal. Coba jelaskan, bagaimana caranya
+sampai ia bisa menebak?''}
+
+Komputer, sebenarnya, tidak lebih pintar dari kita. Ia hanya mengerjakan hitungan-hitungan
+matematika dengan sangat teliti dan sangat cepat. Kalau kita bisa menirukan hitungan itu dengan
+angka kecil di kertas, berarti kita benar-benar memahami apa yang terjadi di dalam ``kotak hitam''
+program tersebut.
+
+Di dokumen ini kita akan menempuh perjalanan itu pelan-pelan. Kita pakai contoh sangat sederhana
+--- hanya \textbf{8 pasien} dan \textbf{3 ciri} --- supaya setiap angka bisa kita hitung dengan
+tangan, sama seperti mengajari seorang anak sekolah dasar. Tetapi rumus yang kita pakai adalah
+\textbf{rumus yang asli}, yang benar-benar ada di dalam program.
+
+Perjalanan kita punya lima langkah besar:
+\begin{enumerate}[label=\textbf{Langkah \arabic*.}, leftmargin=*]
+  \item Menyiapkan data dan mengubah kata menjadi angka.
+  \item Mengukur seberapa ``mirip'' dua pasien.
+  \item Menambah data dengan \textbf{SMOTE}.
+  \item Membangun pohon keputusan, lalu menggabungkannya menjadi \textbf{Random Forest}.
+  \item Menilai seberapa tepat tebakan itu.
+\end{enumerate}
+
+\section{Langkah 1 --- Menyiapkan Data}
+
+\subsection{Delapan pasien kita}
+
+Kita punya catatan delapan pasien MDR-TB. Setiap pasien punya tiga ciri, dan satu kenyataan
+(benar atau tidaknya pengobatan):
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Pasien} & \textbf{Usia} & \textbf{Kepatuhan Minum Obat} & \textbf{Berat Badan} & \textbf{Hasil} \\
+\midrule
+P1 & 30 & Patuh       & 50 & Berhasil \\
+P2 & 40 & Patuh       & 55 & Berhasil \\
+P3 & 25 & Patuh       & 60 & Berhasil \\
+P4 & 55 & Patuh       & 45 & Berhasil \\
+P5 & 50 & Tidak Patuh & 55 & Berhasil \\
+P6 & 45 & Tidak Patuh & 60 & Tidak Berhasil \\
+P7 & 60 & Tidak Patuh & 65 & Tidak Berhasil \\
+P8 & 35 & Tidak Patuh & 70 & Tidak Berhasil \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Perhatikan: ada \textbf{5 pasien Berhasil} dan hanya \textbf{3 pasien Tidak Berhasil}. Kelompok
+``Tidak Berhasil'' jauh lebih sedikit. Inilah yang diistilahkan \textbf{data tidak seimbang}
+(\emph{imbalanced data}). Masalahnya, komputer cenderung mengabaikan kelompok yang sedikit ---
+padahal justru kelompok itulah yang paling ingin kita deteksi (karena pasien yang gagal
+pengobatan perlu segera ditolong). Nanti SMOTE akan membantu mengatasi hal ini.
+
+\subsection{Mengubah kata menjadi angka}
+
+Komputer tidak mengerti kata seperti ``Patuh''. Ia hanya mengerti angka. Maka setiap kata kita
+ganti dengan bilangan, dengan aturan sederhana:
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+\textbf{Kata} & \textbf{Angka} \\
+\midrule
+Patuh          & 1 \\
+Tidak Patuh    & 0 \\
+Berhasil       & 0 \\
+Tidak Berhasil & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Proses ini disebut \textbf{encoding}. Hasilnya menjadi tabel angka seperti ini:
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Pasien} & \textbf{Usia} & \textbf{Kepatuhan} & \textbf{Berat Badan} & \textbf{Hasil} \\
+\midrule
+P1 & 30 & 1 & 50 & 0 \\
+P2 & 40 & 1 & 55 & 0 \\
+P3 & 25 & 1 & 60 & 0 \\
+P4 & 55 & 1 & 45 & 0 \\
+P5 & 50 & 0 & 55 & 0 \\
+P6 & 45 & 0 & 60 & 1 \\
+P7 & 60 & 0 & 65 & 1 \\
+P8 & 35 & 0 & 70 & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{catatan}[Mengapa Berhasil = 0 dan Tidak Berhasil = 1?]
+Angka 0 dan 1 hanyalah label, sama seperti nomor urut. Yang penting konsisten. Kebetulan di
+penelitian ini ``Tidak Berhasil'' dijadikan kelas yang \emph{positif} (yang ingin dideteksi),
+sehingga ia dilabeli 1.
+\end{catatan}
+
+\subsection{Menya\-makan skala (normalisasi)}
+
+Ada satu masalah halus. Usia berkisar 25--60, sedangkan kepatuhan hanya 0 atau 1. Kalau kita
+mengukur ``jarak'' mentah-mentah, angka usia yang besar akan mendominasi dan ciri kepatuhan
+yang sebenarnya penting jadi tidak terlihat. Karena itu, sebelum dihitung, semua ciri
+\emph{disamakan skalanya}. Rumus yang dipakai adalah \textbf{skor-$z$}:
+
+\begin{rumus}
+\[ z = \frac{x - \mu}{\sigma} \]
+\end{rumus}
+
+\noindent Artinya: setiap nilai $x$ dikurangi rata-rata kolomnya ($\mu$), lalu dibagi dengan
+simpangan bakunya ($\sigma$). Hasilnya, semua ciri berada pada skala yang sebanding, sehingga
+tidak ada yang mendominasi.
+
+\begin{catatan}
+Agar mudah diikuti, pada perhitungan tangan ini kita akan terus memakai \textbf{angka asli}
+(bukan hasil normalisasi). Idenya sama persis; komputer melakukannya otomatis. Kita cukup tahu
+bahwa langkah ini ada dan penting.
+\end{catatan}
+
+\section{Langkah 2 --- Mengukur ``Kemiripan'' dengan Jarak}
+
+\subsection{Idenya}
+
+Untuk membuat data tambahan, SMOTE perlu tahu pasien mana yang ``mirip''. Dua pasien dianggap
+mirip jika jaraknya kecil. Jarak yang dipakai adalah \textbf{jarak Euclidean}, yaitu jarak
+lurus antara dua titik --- seperti menarik garis lurus dengan penggaris, hanya saja di ruang
+yang punya banyak ciri.
+
+\subsection{Rumus aslinya}
+
+\begin{rumus}
+\[ d(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2} \]
+\end{rumus}
+
+\noindent Mari kita bedah simbol demi simbol:
+\begin{itemize}[leftmargin=*]
+  \item $d(\mathbf{x},\mathbf{y})$ --- jarak antara pasien $\mathbf{x}$ dan pasien $\mathbf{y}$.
+  \item $x_i$ dan $y_i$ --- nilai ciri ke-$i$ (misalnya usia, atau berat badan).
+  \item $n$ --- banyaknya ciri. Di contoh kita $n = 3$ (usia, kepatuhan, berat badan).
+  \item $\sum$ --- tanda ``jumlahkan semuanya''.
+  \item $(\;\cdot\;)^2$ --- setiap selisih dikuadratkan (supaya tanda minus tidak saling menghapus).
+  \item $\sqrt{\;\cdot\;}$ --- diakhiri dengan akar, sehingga kembali ke satuan semula.
+\end{itemize}
+
+\subsection{Mari menghitung: jarak P6 dan P7}
+
+Ambil pasien P6 $(45;\ 0;\ 60)$ dan P7 $(60;\ 0;\ 65)$. Kita masukkan ke rumus, ciri demi ciri:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Ciri} & \textbf{Selisih} & \textbf{Dikuadratkan} \\
+\midrule
+Usia      & $45 - 60 = -15$ & $(-15)^2 = 225$ \\
+Kepatuhan & $0 - 0 = 0$     & $0^2 = 0$ \\
+Berat     & $60 - 65 = -5$  & $(-5)^2 = 25$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\[
+d = \sqrt{225 + 0 + 25} = \sqrt{250} \approx 15{,}81
+\]
+
+Jadi jarak P6 dan P7 sekitar $15{,}81$. Semakin kecil angka ini, semakin mirip kedua pasien.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Pasangan} & \textbf{Perhitungan} & \textbf{Jarak} \\
+\midrule
+P6 -- P7 & $\sqrt{250}$ & $15{,}81$ \\
+P6 -- P8 & $\sqrt{200}$ & $14{,}14$ \\
+P7 -- P8 & $\sqrt{650}$ & $25{,}50$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{hasil}
+Pasien yang paling mirip dengan P6 adalah \textbf{P8}, karena jaraknya paling kecil
+($14{,}14$). Hubungan ``bertetangga'' inilah yang nanti dipakai SMOTE.
+\end{hasil}
+
+\section{Langkah 3 --- SMOTE: Membuat Pasien Baru}
+
+\subsection{Apa yang dilakukan SMOTE?}
+
+SMOTE (\emph{Synthetic Minority Over-sampling Technique}) menambah jumlah pasien kelompok
+minoritas dengan cara \textbf{membuat pasien baru buatan}. Bedanya dengan menggandakan biasa:
+pasien baru ini \emph{tidak sama persis} dengan yang lama --- ia diletakkan di antara dua
+pasien minoritas yang berdekatan. Ibaratnya, kalau ada dua siswa yang mirip, kita membuat
+``siswa baru'' yang mirip keduanya.
+
+\subsection{Rumus aslinya}
+
+\begin{rumus}
+\[ \mathbf{x}_{\text{baru}} = \mathbf{x}_i + \lambda \cdot \bigl(\mathbf{x}_{zi} - \mathbf{x}_i\bigr),
+\qquad \lambda \sim U(0,1) \]
+\end{rumus}
+
+\noindent Penjelasannya:
+\begin{itemize}[leftmargin=*]
+  \item $\mathbf{x}_i$ --- pasien minoritas yang kita pilih sebagai titik awal.
+  \item $\mathbf{x}_{zi}$ --- salah satu ``tetangga'' terdekatnya (pasien minoritas lain yang mirip).
+  \item $\lambda$ (\emph{lambda}) --- angka acak antara 0 dan 1. Kalau $\lambda = 0{,}5$, pasien
+        baru diletakkan tepat di tengah-tengah. Di contoh ini kita pakai $\lambda = 0{,}5$.
+  \item $\mathbf{x}_{\text{baru}}$ --- pasien buatan hasil hitungan.
+\end{itemize}
+
+\subsection{Membuat pasien baru \#1 (di antara P6 dan P7)}
+
+Kita hitung tiap ciri satu per satu:
+
+\begin{align*}
+\text{Usia}      &= 45 + 0{,}5 \times (60 - 45) = 45 + 0{,}5 \times 15 = 45 + 7{,}5 = 52{,}5 \\
+\text{Kepatuhan} &= 0  + 0{,}5 \times (0 - 0)   = 0 \\
+\text{Berat}     &= 60 + 0{,}5 \times (65 - 60) = 60 + 0{,}5 \times 5  = 60 + 2{,}5 = 62{,}5
+\end{align*}
+
+\[ \mathbf{x}_{\text{baru}\#1} = (52{,}5;\ 0;\ 62{,}5) \quad\text{dengan hasil = Tidak Berhasil} \]
+
+\subsection{Membuat pasien baru \#2 (di antara P7 dan P8)}
+
+\begin{align*}
+\text{Usia}      &= 60 + 0{,}5 \times (35 - 60) = 60 + 0{,}5 \times (-25) = 60 - 12{,}5 = 47{,}5 \\
+\text{Kepatuhan} &= 0  + 0{,}5 \times (0 - 0)   = 0 \\
+\text{Berat}     &= 65 + 0{,}5 \times (70 - 65) = 65 + 2{,}5 = 67{,}5
+\end{align*}
+
+\[ \mathbf{x}_{\text{baru}\#2} = (47{,}5;\ 0;\ 67{,}5) \quad\text{dengan hasil = Tidak Berhasil} \]
+
+\begin{hasil}
+Sebelum SMOTE jumlahnya 5 : 3. Kita tambahkan dua pasien buatan ke kelompok ``Tidak Berhasil'',
+sehingga menjadi \textbf{5 : 5 --- seimbang}. Data kini siap dipakai melatih pohon.
+\end{hasil}
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Kelompok} & \textbf{Sebelum SMOTE} & \textbf{Sesudah SMOTE} \\
+\midrule
+Berhasil        & 5 & 5 \\
+Tidak Berhasil  & 3 & 5 \\
+\midrule
+\textbf{Total}  & \textbf{8} & \textbf{10} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Langkah 4 --- Pohon Keputusan dan Indeks Gini}
+
+\subsection{Seperti permainan ``tebak-tebakan''}
+
+Pohon keputusan bekerja seperti permainan menebak: ia mengajukan pertanyaan ya/tidak, lalu
+mengikuti jawabannya ke pertanyaan berikutnya, sampai tiba di sebuah jawaban akhir. Contoh
+pertanyaan: \emph{``Apakah kepatuhan pasien = Patuh?''} atau \emph{``Apakah berat badannya
+$\le 57{,}5$?''}.
+
+Pertanyaannya: bagaimana pohon memilih pertanyaan yang \emph{paling baik}? Di sinilah indeks
+Gini berperan.
+
+\subsection{Indeks Gini: mengukur ``seberapa campur''}
+
+Bayangkan isi sebuah kantong kelereng. Kalau semua kelerengnya merah, kantong itu ``bersih''
+(sejenis). Kalau campur merah dan biru, kantong itu ``campur''. Gini mengukur tingkat
+kecampuran ini: \textbf{0 berarti benar-benar bersih}, semakin besar berarti semakin campur.
+
+\begin{rumus}
+\[ \text{Gini}(t) = 1 - \sum_{k=1}^{K} p_k^2 \]
+\end{rumus}
+
+\noindent Di sini $p_k$ adalah bagian anggota kelas ke-$k$ di dalam sebuah simpul $t$. Untuk
+masalah dua kelas (Berhasil dan Tidak Berhasil), rumusnya menyederhana menjadi:
+
+\[ \text{Gini} = 1 - (p_0)^2 - (p_1)^2 \]
+
+\subsection{Menghitung Gini sebelum bertanya}
+
+Isi seluruh data kita sekarang 5 ``Berhasil'' dan 5 ``Tidak Berhasil'' dari 10 data:
+\[ p_0 = \tfrac{5}{10} = 0{,}5, \qquad p_1 = \tfrac{5}{10} = 0{,}5 \]
+\[
+\text{Gini} = 1 - (0{,}5)^2 - (0{,}5)^2 = 1 - 0{,}25 - 0{,}25 = 0{,}5
+\]
+Nilai $0{,}5$ berarti datanya cukup campur --- masih ``kotor''.
+
+\subsection{Menghitung Gini setelah bertanya: ``Kepatuhan $\le 0{,}5$?''}
+
+Pertanyaan ini membelah data menjadi dua kelompok. Perhatikan bahwa ``Kepatuhan $\le 0{,}5$''
+artinya ``Tidak Patuh'' (karena Patuh = 1).
+
+\paragraph{Kelompok kiri (Tidak Patuh):} berisi P5, P6, P7, P8, S1, S2 $\to$ 6 data, yaitu
+1 ``Berhasil'' dan 5 ``Tidak Berhasil''.
+\[ p_0 = \tfrac{1}{6} \approx 0{,}167, \qquad p_1 = \tfrac{5}{6} \approx 0{,}833 \]
+\[
+\text{Gini}_{\text{kiri}} = 1 - (0{,}167)^2 - (0{,}833)^2 = 1 - 0{,}028 - 0{,}694 = 0{,}278
+\]
+
+\paragraph{Kelompok kanan (Patuh):} berisi P1, P2, P3, P4 $\to$ 4 data, semuanya ``Berhasil''
+(bersih).
+\[ \text{Gini}_{\text{kanan}} = 1 - (1)^2 - (0)^2 = 0 \]
+
+\paragraph{Gini gabungan.} Kita gabungkan dengan menimbang banyaknya data tiap kelompok:
+\[
+\text{Gini}_{\text{gabungan}} = \frac{6}{10}\,(0{,}278) + \frac{4}{10}\,(0) = 0{,}167 + 0 = 0{,}167
+\]
+
+\subsection{Membandingkan beberapa pertanyaan}
+
+Kita uji beberapa pertanyaan, lalu pilih yang Gini-nya paling kecil (paling bersih):
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+\textbf{Pertanyaan} & \textbf{Gini gabungan} \\
+\midrule
+(tidak bertanya)              & $0{,}500$ \\
+``Usia $\le 37{,}5$?''        & $0{,}476$ \\
+``Kepatuhan $\le 0{,}5$?''    & $0{,}167$ \\
+``Berat Badan $\le 57{,}5$?'' & $0{,}167$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{hasil}
+Pertanyaan \textbf{``Kepatuhan $\le 0{,}5$?''} (dan ``Berat Badan $\le 57{,}5$?'') memberi
+Gini paling kecil, $0{,}167$ --- jauh lebih bersih daripada $0{,}5$ semula. Pertanyaan inilah
+yang dipakai pohon. (Kalau ada dua yang sama bagus, pohon boleh memilih salah satunya.)
+\end{hasil}
+
+\subsection{Menyusun pohonnya}
+
+Dengan mengulang cara yang sama pada tiap cabang, terbentuklah pohon. Kita buat \textbf{tiga
+pohon} yang sedikit berbeda, agar nanti bisa saling melengkapi:
+
+\begin{center}
+\begin{minipage}{0.31\textwidth}
+\centering\small
+\textbf{Pohon 1}\\[4pt]
+\begin{tabular}{l}
+Kepatuhan $\le 0{,}5$? \\
+$\vdash$ Ya $\to$ Berat $\le 57{,}5$? \\
+$\quad\vdash$ Ya $\to$ Berhasil \\
+$\quad\vdash$ Tidak $\to$ Tidak Berhasil \\
+$\vdash$ Tidak $\to$ Berhasil \\
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}{0.33\textwidth}
+\centering\small
+\textbf{Pohon 2}\\[4pt]
+\begin{tabular}{l}
+Berat $\le 57{,}5$? \\
+$\vdash$ Ya $\to$ Berhasil \\
+$\vdash$ Tidak $\to$ Usia $\le 30$? \\
+$\quad\vdash$ Ya $\to$ Berhasil \\
+$\quad\vdash$ Tidak $\to$ Tidak Berhasil \\
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}{0.33\textwidth}
+\centering\small
+\textbf{Pohon 3}\\[4pt]
+\begin{tabular}{l}
+Berat $\le 57{,}5$? \\
+$\vdash$ Ya $\to$ Berhasil \\
+$\vdash$ Tidak $\to$ Kepatuhan $\le 0{,}5$? \\
+$\quad\vdash$ Ya $\to$ Tidak Berhasil \\
+$\quad\vdash$ Tidak $\to$ Berhasil \\
+\end{tabular}
+\end{minipage}
+\end{center}
+
+\section{Langkah 5 --- Random Forest: Banyak Pohon yang Memilih}
+
+\subsection{Mengapa harus banyak pohon?}
+
+Satu pohon bisa keliru. Tapi kalau kita bertanya kepada \emph{banyak} pohon dan mengambil
+suara terbanyak, jawabannya jauh lebih dapat dipercaya --- seperti bertanya kepada beberapa
+dokter lalu mengambil kesimpulan bersama. Kumpulan pohon ini disebut \textbf{Random Forest}
+(hutan acak).
+
+\subsection{Rumus aslinya}
+
+\begin{rumus}
+\[ \hat{y} = \operatorname{mode}\{\, h_1(\mathbf{x}),\ h_2(\mathbf{x}),\ \ldots,\ h_T(\mathbf{x})\,\} \]
+\end{rumus}
+
+\noindent Di sini $h_t(\mathbf{x})$ adalah jawaban pohon ke-$t$ untuk pasien $\mathbf{x}$, dan
+$T$ adalah jumlah pohon. Tanda $\operatorname{mode}$ berarti ``ambil jawaban yang paling sering
+muncul''.
+
+\subsection{Menguji pasien baru}
+
+Misalkan datang pasien baru: \textbf{usia 40}, \textbf{Patuh (1)}, \textbf{berat 60}. Setiap
+pohon kita tanyai satu per satu:
+
+\begin{center}
+\begin{tabular}{clc}
+\toprule
+\textbf{Pohon} & \textbf{Alur jawabannya} & \textbf{Suara} \\
+\midrule
+Pohon 1 & Patuh (1) $\to$ tidak masuk ``Ya'' $\to$ \textbf{Berhasil} & Berhasil (0) \\
+Pohon 2 & Berat $60 > 57{,}5$ $\to$ Usia $40 > 30$ $\to$ \textbf{Tidak Berhasil} & Tidak Berhasil (1) \\
+Pohon 3 & Berat $60 > 57{,}5$ $\to$ Patuh (1) $\to$ \textbf{Berhasil} & Berhasil (0) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\[
+\text{Suara:}\quad \text{Berhasil} = 2, \qquad \text{Tidak Berhasil} = 1
+\]
+
+\begin{hasil}
+Karena ``Berhasil'' mendapat suara terbanyak (2 dari 3), hasil akhirnya:
+\textbf{Berhasil}.
+\end{hasil}
+
+\section{Langkah 6 --- Menghitung Tingkat Keyakinan}
+
+Keyakinan menunjukkan seberapa banyak pohon yang setuju dengan jawaban pemenang.
+
+\begin{rumus}
+\[ \text{Keyakinan} = \frac{\text{jumlah suara pemenang}}{T} \times 100\% \]
+\end{rumus}
+
+\[
+\text{Keyakinan} = \frac{2}{3} \times 100\% = 0{,}6667 \times 100\% = 66{,}67\%
+\]
+
+\begin{hasil}
+Sistem \textbf{66{,}67\% yakin} pasien tersebut akan \textbf{Berhasil}. Jika ketiga pohon
+setuju (3 dari 3), keyakinannya menjadi $100\%$.
+\end{hasil}
+
+\section{Langkah 7 --- Menilai Seberapa Tepat Tebakan}
+
+\subsection{Menguji pada pasien yang jawabannya sudah diketahui}
+
+Kita uji sistem ke \textbf{6 pasien uji} yang hasil aslinya sudah kita ketahui, lalu bandingkan
+tebakan dengan kenyataan:
+
+\begin{center}
+\begin{tabular}{ccccccc}
+\toprule
+\textbf{Uji} & \textbf{Usia} & \textbf{Patuh} & \textbf{Berat} & \textbf{Suara} & \textbf{Tebakan} & \textbf{Kenyataan} \\
+\midrule
+T1 & 32 & 1 & 48 & 0,0,0 & Berhasil & Berhasil \\
+T2 & 38 & 1 & 58 & 0,1,0 & Berhasil & Berhasil \\
+T3 & 44 & 1 & 63 & 0,1,0 & Berhasil & \textcolor{merah}{Tidak Berhasil} \\
+T4 & 50 & 0 & 55 & 0,0,0 & Berhasil & Berhasil \\
+T5 & 62 & 0 & 66 & 1,1,1 & Tidak Berhasil & Tidak Berhasil \\
+T6 & 36 & 0 & 72 & 1,1,1 & Tidak Berhasil & Tidak Berhasil \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Confusion matrix}
+
+Hasil perbandingan itu kita rangkum dalam sebuah tabel bernama \textbf{confusion matrix}. Karena
+yang paling ingin kita deteksi adalah pasien \textbf{Tidak Berhasil} (kelompok minoritas),
+maka ``Tidak Berhasil'' dianggap sebagai kelas \textbf{positif}.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+& \multicolumn{2}{c}{\textbf{Tebakan sistem}} & \\
+\cmidrule(lr){2-3}
+\textbf{Kenyataan} & Berhasil & Tidak Berhasil & \textbf{Jumlah} \\
+\midrule
+Berhasil        & \textcolor{hijau}{TN = 3} & FP = 0 & 3 \\
+Tidak Berhasil  & \textcolor{merah}{FN = 1} & \textcolor{hijau}{TP = 2} & 3 \\
+\midrule
+\textbf{Jumlah} & 3 & 2 & 6 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{TP} (\emph{True Positive}) = 2: pasien ``Tidak Berhasil'' yang \emph{benar} ditebak Tidak Berhasil.
+  \item \textbf{TN} (\emph{True Negative}) = 3: pasien ``Berhasil'' yang \emph{benar} ditebak Berhasil.
+  \item \textbf{FP} (\emph{False Positive}) = 0: pasien ``Berhasil'' yang \emph{salah} ditebak Tidak Berhasil.
+  \item \textbf{FN} (\emph{False Negative}) = 1: pasien ``Tidak Berhasil'' yang \emph{salah} ditebak Berhasil (paling berbahaya, karena pasien berisiko justru lolos).
+\end{itemize}
+
+\subsection{Empat rumus penilaian}
+
+\paragraph{Akurasi} --- seberapa banyak tebakan yang benar secara keseluruhan:
+\[ \text{Akurasi} = \frac{TP + TN}{TP + TN + FP + FN} = \frac{2+3}{6} = \frac{5}{6} = 0{,}8333 = 83{,}33\% \]
+
+\paragraph{Presisi} --- dari semua yang ditebak ``Tidak Berhasil'', berapa yang benar-benar begitu:
+\[ \text{Presisi} = \frac{TP}{TP + FP} = \frac{2}{2+0} = 1 = 100\% \]
+
+\paragraph{Recall} --- dari semua yang benar-benar ``Tidak Berhasil'', berapa yang berhasil ditemukan:
+\[ \text{Recall} = \frac{TP}{TP + FN} = \frac{2}{2+1} = 0{,}6667 = 66{,}67\% \]
+
+\paragraph{F1-score} --- keseimbangan antara presisi dan recall:
+\[
+F1 = 2 \cdot \frac{\text{Presisi} \times \text{Recall}}{\text{Presisi} + \text{Recall}}
+   = 2 \cdot \frac{1 \times 0{,}6667}{1 + 0{,}6667}
+   = \frac{1{,}3333}{1{,}6667} = 0{,}8 = 80\%
+\]
+
+\begin{hasil}
+\begin{center}
+\begin{tabular}{lcl}
+\toprule
+\textbf{Metrik} & \textbf{Nilai} & \textbf{Artinya} \\
+\midrule
+Akurasi  & 83{,}33\% & 5 dari 6 tebakan benar \\
+Presisi  & 100\%     & yang ditebak ``Tidak Berhasil'' selalu benar \\
+Recall   & 66{,}67\% & 2 dari 3 ``Tidak Berhasil'' berhasil ditemukan \\
+F1-score & 80\%      & gabungan presisi dan recall \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{hasil}
+
+\section{Rangkuman: Perjalanan dari Data sampai Hasil}
+
+Mari kita lihat kembali seluruh perjalanannya dalam satu tarikan napas:
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Data.} 8 pasien: 5 Berhasil, 3 Tidak Berhasil (tidak seimbang).
+  \item \textbf{Encoding.} Patuh = 1, Tidak Patuh = 0; Berhasil = 0, Tidak Berhasil = 1.
+  \item \textbf{Jarak.} Cari pasien yang mirip, misalnya P6--P8 berjarak $14{,}14$.
+  \item \textbf{SMOTE.} Buat 2 pasien buatan (S1 dan S2) $\to$ kelas jadi seimbang 5 : 5.
+  \item \textbf{Gini.} Pilih pertanyaan paling bersih ($0{,}167 < 0{,}5$).
+  \item \textbf{Pohon.} Susun 3 pohon dari pertanyaan-pertanyaan itu.
+  \item \textbf{Voting.} 3 pohon memberi suara $\to$ pemenangnya ``Berhasil'' (2 dari 3).
+  \item \textbf{Keyakinan.} $(2 \div 3) \times 100\% = 66{,}67\%$.
+  \item \textbf{Penilaian.} Akurasi $83{,}33\%$, presisi $100\%$, recall $66{,}67\%$, F1 $80\%$.
+\end{enumerate}
+
+\begin{catatan}
+Contoh ini sengaja dikecilkan (3 ciri, 8 pasien, 3 pohon) agar bisa dihitung dengan tangan.
+Model pada penelitian sesungguhnya lebih besar --- 175 baris data, 17 variabel, dan 100 pohon
+--- namun \textbf{langkah-langkahnya sama persis}; hanya diulang lebih banyak kali. Jadi kalau
+kita paham contoh kecil ini, kita paham juga cara kerja model yang sebenarnya.
+\end{catatan}
+
+\end{document}
