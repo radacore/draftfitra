@@ -136,6 +136,21 @@ if FILLED:
                       "di bawah ini masih kosong."),
                  new=("Survei dilaksanakan terhadap sebelas responden yang terdiri atas tenaga medis "
                       "dan admin, dan hasilnya direkapitulasi pada Tabel 13 dan Tabel 14."))
+    # saran SUS/TAM: survei sudah terlaksana
+    _patch_bab45(_b45, "Survei SUS dan TAM sebaiknya segera dilaksanakan",
+                 old=("Survei SUS dan TAM sebaiknya segera dilaksanakan terhadap tenaga medis dan "
+                      "admin menggunakan instrumen pada Tabel 12 sampai Tabel 14 agar tingkat "
+                      "penerimaan sistem terukur sebelum penerapan penuh."),
+                 new=("Survei SUS dan TAM yang telah dilaksanakan sebaiknya diulang secara berkala "
+                      "dengan jumlah responden yang lebih banyak serta melibatkan fasilitas kesehatan "
+                      "lain agar tingkat penerimaan sistem tetap terukur sebelum penerapan penuh."))
+    # pembahasan: instrumen SUS/TAM sudah terisi
+    _patch_bab45(_b45, "Instrumen SUS dan TAM yang disiapkan memungkinkan",
+                 old=("Instrumen SUS dan TAM yang disiapkan memungkinkan evaluasi penerimaan pengguna "
+                      "dilanjutkan segera setelah survei lapangan dilaksanakan."),
+                 new=("Survei penerimaan pengguna melalui SUS dan TAM yang telah dilaksanakan "
+                      "memperkuat temuan ini, dengan skor SUS rata-rata 89,8 (Excellent) dan penilaian "
+                      "TAM rata-rata 4,52 (kategori sangat tinggi)."))
 
 REVISION = (" Jumlah rekam medis pasien MDR-TB yang dihimpun sebanyak 175 data, "
             "terdiri atas 121 pasien dengan status pengobatan berhasil dan 54 pasien "
